@@ -45,6 +45,8 @@ export class BootstrapAdminService implements OnApplicationBootstrap {
     const user = User.create({
       id: this.ids.next(),
       email: boot.adminEmail,
+      firstName: 'System',
+      lastName: 'Administrator',
       passwordHash: hash,
       roleId: role.id,
       mustChangePassword: true,

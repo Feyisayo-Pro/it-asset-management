@@ -39,6 +39,8 @@ describe('ForgotPasswordUseCase', () => {
     const user = User.create({
       id: 'u1',
       email: 'e@example.com',
+      firstName: 'First',
+      lastName: 'Last',
       passwordHash: 'x',
       roleId: 'r1',
     });
@@ -63,6 +65,8 @@ describe('ForgotPasswordUseCase', () => {
     const user = User.create({
       id: 'u1',
       email: 'e@example.com',
+      firstName: 'First',
+      lastName: 'Last',
       passwordHash: 'x',
       roleId: 'r1',
     });
@@ -77,6 +81,8 @@ describe('ForgotPasswordUseCase', () => {
     const user = User.create({
       id: 'u1',
       email: 'e@example.com',
+      firstName: 'First',
+      lastName: 'Last',
       passwordHash: 'x',
       roleId: 'r1',
     });

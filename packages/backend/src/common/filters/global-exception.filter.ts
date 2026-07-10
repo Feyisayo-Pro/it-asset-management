@@ -121,5 +121,12 @@ function mapDomainToStatus(code: string): number {
   if (code === 'AUTH_ACCOUNT_DISABLED') return HttpStatus.UNAUTHORIZED;
   if (code === 'AUTH_WEAK_PASSWORD') return HttpStatus.BAD_REQUEST;
   if (code === 'AUTH_SAME_PASSWORD') return HttpStatus.BAD_REQUEST;
+  if (code === 'USER_NOT_FOUND') return HttpStatus.NOT_FOUND;
+  if (code === 'ROLE_NOT_FOUND') return HttpStatus.NOT_FOUND;
+  if (code === 'DUPLICATE_EMAIL') return HttpStatus.CONFLICT;
+  if (code === 'CANNOT_DEMOTE_LAST_ADMIN') return HttpStatus.CONFLICT;
+  if (code === 'CANNOT_DEACTIVATE_LAST_ADMIN') return HttpStatus.CONFLICT;
+  if (code === 'CANNOT_CHANGE_OWN_ROLE') return HttpStatus.FORBIDDEN;
+  if (code === 'CANNOT_DEACTIVATE_SELF') return HttpStatus.FORBIDDEN;
   return HttpStatus.BAD_REQUEST;
 }

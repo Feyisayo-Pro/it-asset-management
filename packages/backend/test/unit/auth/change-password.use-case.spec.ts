@@ -37,6 +37,8 @@ const seed = async (ctx: ReturnType<typeof build>) => {
   const user = User.create({
     id: 'u1',
     email: 'e@example.com',
+      firstName: 'First',
+      lastName: 'Last',
     passwordHash: await ctx.hasher.hash('CurrentPass-9!X'),
     roleId: 'r1',
   });

@@ -54,6 +54,8 @@ const seedUser = async (
   const user = User.create({
     id: 'u1',
     email: 'e@example.com',
+      firstName: 'First',
+      lastName: 'Last',
     passwordHash,
     roleId: 'r1',
   });

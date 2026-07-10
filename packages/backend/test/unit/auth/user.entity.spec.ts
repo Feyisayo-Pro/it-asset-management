@@ -6,6 +6,8 @@ describe('User entity', () => {
     User.create({
       id: 'u1',
       email: 'A@Example.COM',
+      firstName: 'First',
+      lastName: 'Last',
       passwordHash: 'hash',
       roleId: 'r1',
     });
@@ -50,6 +52,8 @@ describe('User entity', () => {
     const u = User.create({
       id: 'u1',
       email: 'a@x',
+      firstName: 'First',
+      lastName: 'Last',
       passwordHash: 'hash',
       roleId: 'r1',
       mustChangePassword: true,

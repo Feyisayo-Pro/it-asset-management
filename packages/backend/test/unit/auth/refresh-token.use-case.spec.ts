@@ -38,6 +38,8 @@ const seedUserAndRefreshToken = async (ctx: ReturnType<typeof build>) => {
   const user = User.create({
     id: 'u1',
     email: 'e@example.com',
+      firstName: 'First',
+      lastName: 'Last',
     passwordHash: 'x',
     roleId: 'r1',
   });

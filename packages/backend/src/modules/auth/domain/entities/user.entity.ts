@@ -7,6 +7,8 @@
 export interface UserProps {
   id: string;
   email: string;
+  firstName: string;
+  lastName: string;
   passwordHash: string;
   roleId: string;
   isActive: boolean;
@@ -28,6 +30,8 @@ export class User {
   static create(input: {
     id: string;
     email: string;
+    firstName: string;
+    lastName: string;
     passwordHash: string;
     roleId: string;
     mustChangePassword?: boolean;
@@ -36,6 +40,8 @@ export class User {
     return new User({
       id: input.id,
       email: input.email.toLowerCase(),
+      firstName: input.firstName.trim(),
+      lastName: input.lastName.trim(),
       passwordHash: input.passwordHash,
       roleId: input.roleId,
       isActive: true,
@@ -53,6 +59,15 @@ export class User {
   }
   get email(): string {
     return this.props.email;
+  }
+  get firstName(): string {
+    return this.props.firstName;
+  }
+  get lastName(): string {
+    return this.props.lastName;
+  }
+  get fullName(): string {
+    return `${this.props.firstName} ${this.props.lastName}`.trim();
   }
   get passwordHash(): string {
     return this.props.passwordHash;
@@ -121,6 +136,29 @@ export class User {
 
   deactivate(now: Date): void {
     this.props.isActive = false;
+    this.props.updatedAt = now;
+  }
+
+  activate(now: Date): void {
+    this.props.isActive = true;
+    this.props.failedLoginAttempts = 0;
+    this.props.lockedUntil = null;
+    this.props.updatedAt = now;
+  }
+
+  updateProfile(
+    input: { firstName?: string; lastName?: string; email?: string },
+    now: Date,
+  ): void {
+    if (input.firstName !== undefined) this.props.firstName = input.firstName.trim();
+    if (input.lastName !== undefined) this.props.lastName = input.lastName.trim();
+    if (input.email !== undefined) this.props.email = input.email.toLowerCase();
+    this.props.updatedAt = now;
+  }
+
+  changeRole(newRoleId: string, now: Date): void {
+    if (this.props.roleId === newRoleId) return;
+    this.props.roleId = newRoleId;
     this.props.updatedAt = now;
   }
 

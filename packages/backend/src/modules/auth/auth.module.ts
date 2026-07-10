@@ -27,7 +27,15 @@ import { LogoutUseCase } from './application/use-cases/logout.use-case';
 import { ForgotPasswordUseCase } from './application/use-cases/forgot-password.use-case';
 import { ResetPasswordUseCase } from './application/use-cases/reset-password.use-case';
 import { ChangePasswordUseCase } from './application/use-cases/change-password.use-case';
+import { CreateUserUseCase } from './application/use-cases/admin/create-user.use-case';
+import { UpdateUserUseCase } from './application/use-cases/admin/update-user.use-case';
+import { ChangeUserRoleUseCase } from './application/use-cases/admin/change-user-role.use-case';
+import { DeactivateUserUseCase } from './application/use-cases/admin/deactivate-user.use-case';
+import { ActivateUserUseCase } from './application/use-cases/admin/activate-user.use-case';
+import { ListUsersUseCase } from './application/use-cases/admin/list-users.use-case';
+import { GetUserUseCase } from './application/use-cases/admin/get-user.use-case';
 import { AuthController } from './presentation/auth.controller';
+import { AdminUserController } from './presentation/admin-user.controller';
 import { CommonModule } from '../../common/common.module';
 import { RbacModule } from '../rbac/rbac.module';
 
@@ -42,7 +50,7 @@ import { RbacModule } from '../rbac/rbac.module';
     CommonModule,
     RbacModule,
   ],
-  controllers: [AuthController],
+  controllers: [AuthController, AdminUserController],
   providers: [
     LoginUseCase,
     RefreshTokenUseCase,
@@ -50,6 +58,13 @@ import { RbacModule } from '../rbac/rbac.module';
     ForgotPasswordUseCase,
     ResetPasswordUseCase,
     ChangePasswordUseCase,
+    CreateUserUseCase,
+    UpdateUserUseCase,
+    ChangeUserRoleUseCase,
+    DeactivateUserUseCase,
+    ActivateUserUseCase,
+    ListUsersUseCase,
+    GetUserUseCase,
     BootstrapAdminService,
     { provide: USER_REPOSITORY, useClass: TypeOrmUserRepository },
     { provide: REFRESH_TOKEN_REPOSITORY, useClass: TypeOrmRefreshTokenRepository },

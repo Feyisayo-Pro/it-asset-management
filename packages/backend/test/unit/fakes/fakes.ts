@@ -5,7 +5,11 @@
  * predictable outputs so assertions don't depend on random state.
  */
 import { User } from '../../../src/modules/auth/domain/entities/user.entity';
-import { UserRepository } from '../../../src/modules/auth/domain/repositories/user.repository';
+import {
+  ListUsersParams,
+  ListUsersResult,
+  UserRepository,
+} from '../../../src/modules/auth/domain/repositories/user.repository';
 import {
   RefreshToken,
 } from '../../../src/modules/auth/domain/entities/refresh-token.entity';
@@ -43,6 +47,48 @@ export class FakeUserRepository implements UserRepository {
   }
   async countAll(): Promise<number> {
     return this.byId.size;
+  }
+  async countActiveByRole(roleId: string): Promise<number> {
+    let n = 0;
+    for (const u of this.byId.values()) {
+      if (u.roleId === roleId && u.isActive) n += 1;
+    }
+    return n;
+  }
+  async list(params: ListUsersParams): Promise<ListUsersResult> {
+    let items = Array.from(this.byId.values());
+    if (params.search) {
+      const q = params.search.trim().toLowerCase();
+      items = items.filter(
+        (u) =>
+          u.email.includes(q) ||
+          u.firstName.toLowerCase().includes(q) ||
+          u.lastName.toLowerCase().includes(q),
+      );
+    }
+    if (params.roleId) items = items.filter((u) => u.roleId === params.roleId);
+    if (params.isActive !== undefined) {
+      items = items.filter((u) => u.isActive === params.isActive);
+    }
+
+    const field = params.sort?.field ?? 'lastName';
+    const dir = params.sort?.direction === 'desc' ? -1 : 1;
+    items.sort((a, b) => {
+      const av = (a as unknown as Record<string, unknown>)[field] ?? '';
+      const bv = (b as unknown as Record<string, unknown>)[field] ?? '';
+      return av < bv ? -1 * dir : av > bv ? 1 * dir : 0;
+    });
+
+    const page = Math.max(1, params.page);
+    const pageSize = Math.min(200, Math.max(1, params.pageSize));
+    const total = items.length;
+    const start = (page - 1) * pageSize;
+    return {
+      data: items.slice(start, start + pageSize),
+      page,
+      pageSize,
+      total,
+    };
   }
   async save(user: User): Promise<User> {
     this.byId.set(user.id, user);
