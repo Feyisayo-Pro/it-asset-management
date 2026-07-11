@@ -14,6 +14,7 @@ import {
   UserOutlined,
   LogoutOutlined,
   TeamOutlined,
+  LaptopOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
 } from '@ant-design/icons';
@@ -32,11 +33,21 @@ export const AppLayout = () => {
 
   const menuItems = [
     {
-      key: '/admin/users',
-      icon: <TeamOutlined />,
-      label: 'Users',
-      onClick: () => nav('/admin/users'),
+      key: '/assets',
+      icon: <LaptopOutlined />,
+      label: 'Assets',
+      onClick: () => nav('/assets'),
     },
+    ...(roleName === 'SUPER_ADMIN'
+      ? [
+          {
+            key: '/admin/users',
+            icon: <TeamOutlined />,
+            label: 'Users',
+            onClick: () => nav('/admin/users'),
+          },
+        ]
+      : []),
   ];
 
   const userMenu = {

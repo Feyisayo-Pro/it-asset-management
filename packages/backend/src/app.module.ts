@@ -15,6 +15,9 @@ import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 import { RbacGuard } from './common/guards/rbac.guard';
 import { AuthModule } from './modules/auth/auth.module';
 import { RbacModule } from './modules/rbac/rbac.module';
+import { AuditModule } from './modules/audit/audit.module';
+import { AssetModule } from './modules/asset/asset.module';
+import { WorkflowModule } from './modules/workflow/workflow.module';
 
 @Module({
   imports: [
@@ -41,8 +44,11 @@ import { RbacModule } from './modules/rbac/rbac.module';
       },
     }),
     CommonModule,
+    AuditModule,
     RbacModule,
     AuthModule,
+    AssetModule,
+    WorkflowModule,
   ],
   providers: [
     { provide: APP_GUARD, useClass: ThrottlerGuard },

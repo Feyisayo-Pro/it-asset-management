@@ -128,5 +128,20 @@ function mapDomainToStatus(code: string): number {
   if (code === 'CANNOT_DEACTIVATE_LAST_ADMIN') return HttpStatus.CONFLICT;
   if (code === 'CANNOT_CHANGE_OWN_ROLE') return HttpStatus.FORBIDDEN;
   if (code === 'CANNOT_DEACTIVATE_SELF') return HttpStatus.FORBIDDEN;
+  if (code === 'ASSET_NOT_FOUND') return HttpStatus.NOT_FOUND;
+  if (code === 'DUPLICATE_ASSET_TAG') return HttpStatus.CONFLICT;
+  if (code === 'DUPLICATE_SERIAL_NUMBER') return HttpStatus.CONFLICT;
+  if (code === 'DUPLICATE_IMEI') return HttpStatus.CONFLICT;
+  if (code === 'INVALID_ASSET_STATUS_TRANSITION') return HttpStatus.CONFLICT;
+  if (code === 'ASSET_WARRANTY_BEFORE_PURCHASE') return HttpStatus.BAD_REQUEST;
+  if (code === 'WORKFLOW_DEFINITION_NOT_FOUND') return HttpStatus.NOT_FOUND;
+  if (code === 'WORKFLOW_INSTANCE_NOT_FOUND') return HttpStatus.NOT_FOUND;
+  if (code === 'WORKFLOW_ALREADY_EXISTS') return HttpStatus.CONFLICT;
+  if (code === 'WORKFLOW_ALREADY_COMPLETED') return HttpStatus.CONFLICT;
+  if (code === 'INVALID_TRANSITION') return HttpStatus.CONFLICT;
+  if (code === 'ROLE_NOT_ALLOWED_FOR_TRANSITION') return HttpStatus.FORBIDDEN;
+  if (code === 'TRANSITION_REQUIRES_SIGNATURE') return HttpStatus.BAD_REQUEST;
+  if (code === 'TRANSITION_REQUIRES_EVIDENCE') return HttpStatus.BAD_REQUEST;
+  if (code === 'TRANSITION_REQUIRES_COMMENT') return HttpStatus.BAD_REQUEST;
   return HttpStatus.BAD_REQUEST;
 }

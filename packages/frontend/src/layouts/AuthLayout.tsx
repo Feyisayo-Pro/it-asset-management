@@ -4,7 +4,7 @@ import { useAuthStore } from '@/stores/auth.store';
 
 export const AuthLayout = () => {
   const isAuthed = useAuthStore((s) => !!s.accessToken && !!s.user);
-  if (isAuthed) return <Navigate to="/admin/users" replace />;
+  if (isAuthed) return <Navigate to="/assets" replace />;
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Layout.Content

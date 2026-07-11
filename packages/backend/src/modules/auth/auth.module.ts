@@ -78,6 +78,6 @@ import { RbacModule } from '../rbac/rbac.module';
     { provide: ID_GENERATOR, useClass: UuidIdGenerator },
     { provide: CLOCK, useClass: SystemClock },
   ],
-  exports: [TOKEN_SERVICE],
+  exports: [TOKEN_SERVICE, ID_GENERATOR, CLOCK, PASSWORD_HASHER, MAIL_SERVICE],
 })
 export class AuthModule {}

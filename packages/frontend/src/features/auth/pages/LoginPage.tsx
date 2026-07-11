@@ -17,8 +17,7 @@ export const LoginPage = () => {
   const [error, setError] = useState<string | null>(null);
 
   const returnTo =
-    (location.state as { returnTo?: string } | null)?.returnTo ??
-    '/admin/users';
+    (location.state as { returnTo?: string } | null)?.returnTo ?? '/assets';
 
   const onFinish = async (values: FormValues) => {
     setError(null);

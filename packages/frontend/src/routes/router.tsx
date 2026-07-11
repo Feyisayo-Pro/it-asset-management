@@ -6,6 +6,11 @@ import { LoginPage } from '@/features/auth/pages/LoginPage';
 import { UserManagementPage } from '@/features/admin/users/pages/UserManagementPage';
 import { UserCreatePage } from '@/features/admin/users/pages/UserCreatePage';
 import { UserEditPage } from '@/features/admin/users/pages/UserEditPage';
+import { AssetListPage } from '@/features/assets/pages/AssetListPage';
+import { AssetCreatePage } from '@/features/assets/pages/AssetCreatePage';
+import { AssetEditPage } from '@/features/assets/pages/AssetEditPage';
+import { AssetDetailPage } from '@/features/assets/pages/AssetDetailPage';
+import { AssetImportPage } from '@/features/assets/pages/AssetImportPage';
 import { RoleName } from '@/types/role';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 import { PermissionDeniedPage } from '@/pages/PermissionDeniedPage';
@@ -30,6 +35,28 @@ export const router = createBrowserRouter([
       { path: 'admin/users', element: <UserManagementPage /> },
       { path: 'admin/users/new', element: <UserCreatePage /> },
       { path: 'admin/users/:id/edit', element: <UserEditPage /> },
+    ],
+  },
+  {
+    path: '/',
+    element: (
+      <ProtectedRoute
+        allowedRoles={[
+          RoleName.SUPER_ADMIN,
+          RoleName.STORES_OFFICER,
+          RoleName.IT_REP,
+          RoleName.PEOPLE_CULTURE,
+        ]}
+      >
+        <AppLayout />
+      </ProtectedRoute>
+    ),
+    children: [
+      { path: 'assets', element: <AssetListPage /> },
+      { path: 'assets/new', element: <AssetCreatePage /> },
+      { path: 'assets/import', element: <AssetImportPage /> },
+      { path: 'assets/:id', element: <AssetDetailPage /> },
+      { path: 'assets/:id/edit', element: <AssetEditPage /> },
     ],
   },
   { path: '/403', element: <PermissionDeniedPage /> },

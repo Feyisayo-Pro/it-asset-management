@@ -22,6 +22,15 @@ export const Permission = {
 
   // RBAC admin
   RbacRead: 'rbac:read',
+
+  // Audit
+  AuditRead: 'audit:read',
+
+  // Workflow engine
+  WorkflowRead: 'workflow:read',
+  WorkflowConfigure: 'workflow:configure',
+  WorkflowTransition: 'workflow:transition',
+  WorkflowBypass: 'workflow:bypass',
 } as const;
 
 export type Permission = (typeof Permission)[keyof typeof Permission];
