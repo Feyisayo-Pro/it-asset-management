@@ -98,6 +98,8 @@ export class TransitionWorkflowUseCase {
         new WorkflowCompletedEvent({
           instanceId: instance.id,
           finalState: decision.toState,
+          subjectType: instance.subjectType,
+          subjectId: instance.subjectId,
         }),
       );
     } else {

@@ -32,6 +32,8 @@ export class WorkflowStageCompletedEvent extends DomainEvent<{
 export class WorkflowCompletedEvent extends DomainEvent<{
   instanceId: string;
   finalState: string;
+  subjectType: string;
+  subjectId: string;
 }> {
   readonly name = 'workflow.completed';
 }

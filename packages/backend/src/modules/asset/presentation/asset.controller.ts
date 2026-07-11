@@ -16,6 +16,10 @@ import {
 import { Response } from 'express';
 import { Roles } from '../../../common/decorators/roles.decorator';
 import { RequirePermissions } from '../../../common/decorators/permissions.decorator';
+import {
+  AuthenticatedUser,
+  CurrentUser,
+} from '../../../common/decorators/current-user.decorator';
 import { RoleName } from '../../rbac/domain/enums/role-name.enum';
 import { Permission } from '../../rbac/domain/enums/permission.enum';
 import { RegisterAssetUseCase } from '../application/use-cases/register-asset.use-case';
@@ -36,7 +40,13 @@ import { toAssetDto, toStatusHistoryDto } from './dto/asset.mapper';
 import { BARCODE_SERVICE, BarcodeService } from '../application/ports/barcode.port';
 
 @Controller('assets')
-@Roles(RoleName.SUPER_ADMIN, RoleName.STORES_OFFICER, RoleName.IT_REP, RoleName.PEOPLE_CULTURE)
+@Roles(
+  RoleName.SUPER_ADMIN,
+  RoleName.STORES_OFFICER,
+  RoleName.IT_REP,
+  RoleName.PEOPLE_CULTURE,
+  RoleName.EMPLOYEE,
+)
 export class AssetController {
   constructor(
     private readonly registerAsset: RegisterAssetUseCase,
@@ -52,8 +62,13 @@ export class AssetController {
   ) {}
 
   @Get()
-  @RequirePermissions(Permission.AssetRead)
-  async list(@Query() q: ListAssetsQuery) {
+  async list(
+    @Query() q: ListAssetsQuery,
+    @CurrentUser() user: AuthenticatedUser,
+  ) {
+    // Row-level scoping: users without asset:read (Employees, who hold
+    // asset:read-own) only ever see assets currently assigned to them.
+    const canReadAll = user.permissions.includes(Permission.AssetRead);
     const result = await this.listAssets.execute({
       page: q.page,
       pageSize: q.pageSize,
@@ -62,7 +77,7 @@ export class AssetController {
       deviceType: q.deviceType,
       brand: q.brand,
       department: q.department,
-      currentHolderId: q.currentHolderId,
+      currentHolderId: canReadAll ? q.currentHolderId : user.id,
       sort: q.sortField
         ? { field: q.sortField, direction: q.sortDirection ?? 'asc' }
         : undefined,

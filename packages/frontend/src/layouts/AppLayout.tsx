@@ -15,6 +15,7 @@ import {
   LogoutOutlined,
   TeamOutlined,
   LaptopOutlined,
+  RollbackOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
 } from '@ant-design/icons';
@@ -37,6 +38,12 @@ export const AppLayout = () => {
       icon: <LaptopOutlined />,
       label: 'Assets',
       onClick: () => nav('/assets'),
+    },
+    {
+      key: '/returns',
+      icon: <RollbackOutlined />,
+      label: 'Returns',
+      onClick: () => nav('/returns'),
     },
     ...(roleName === 'SUPER_ADMIN'
       ? [

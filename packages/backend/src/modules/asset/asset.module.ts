@@ -44,5 +44,6 @@ import { AuthModule } from '../auth/auth.module';
     ExportAssetsUseCase,
     GetAssetHistoryUseCase,
   ],
+  exports: [ASSET_REPOSITORY, ChangeAssetStatusUseCase, GetAssetUseCase],
 })
 export class AssetModule {}

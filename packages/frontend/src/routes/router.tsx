@@ -11,6 +11,9 @@ import { AssetCreatePage } from '@/features/assets/pages/AssetCreatePage';
 import { AssetEditPage } from '@/features/assets/pages/AssetEditPage';
 import { AssetDetailPage } from '@/features/assets/pages/AssetDetailPage';
 import { AssetImportPage } from '@/features/assets/pages/AssetImportPage';
+import { ReturnListPage } from '@/features/returns/pages/ReturnListPage';
+import { InitiateReturnPage } from '@/features/returns/pages/InitiateReturnPage';
+import { ReturnDetailPage } from '@/features/returns/pages/ReturnDetailPage';
 import { RoleName } from '@/types/role';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 import { PermissionDeniedPage } from '@/pages/PermissionDeniedPage';
@@ -57,6 +60,19 @@ export const router = createBrowserRouter([
       { path: 'assets/import', element: <AssetImportPage /> },
       { path: 'assets/:id', element: <AssetDetailPage /> },
       { path: 'assets/:id/edit', element: <AssetEditPage /> },
+    ],
+  },
+  {
+    path: '/',
+    element: (
+      <ProtectedRoute>
+        <AppLayout />
+      </ProtectedRoute>
+    ),
+    children: [
+      { path: 'returns', element: <ReturnListPage /> },
+      { path: 'returns/new', element: <InitiateReturnPage /> },
+      { path: 'returns/:id', element: <ReturnDetailPage /> },
     ],
   },
   { path: '/403', element: <PermissionDeniedPage /> },

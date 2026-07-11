@@ -92,6 +92,8 @@ export class BypassWorkflowUseCase {
         new WorkflowCompletedEvent({
           instanceId: instance.id,
           finalState: command.toState,
+          subjectType: instance.subjectType,
+          subjectId: instance.subjectId,
         }),
       );
     }

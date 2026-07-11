@@ -143,5 +143,12 @@ function mapDomainToStatus(code: string): number {
   if (code === 'TRANSITION_REQUIRES_SIGNATURE') return HttpStatus.BAD_REQUEST;
   if (code === 'TRANSITION_REQUIRES_EVIDENCE') return HttpStatus.BAD_REQUEST;
   if (code === 'TRANSITION_REQUIRES_COMMENT') return HttpStatus.BAD_REQUEST;
+  if (code === 'RETURN_NOT_FOUND') return HttpStatus.NOT_FOUND;
+  if (code === 'ASSET_NOT_RETURNABLE') return HttpStatus.CONFLICT;
+  if (code === 'ACTIVE_RETURN_EXISTS') return HttpStatus.CONFLICT;
+  if (code === 'NOT_ASSET_HOLDER') return HttpStatus.FORBIDDEN;
+  if (code === 'RETURN_ITEMS_REQUIRED') return HttpStatus.BAD_REQUEST;
+  if (code === 'RETURN_ITEM_NOTES_REQUIRED') return HttpStatus.BAD_REQUEST;
+  if (code === 'ASSESSMENT_INCOMPLETE') return HttpStatus.BAD_REQUEST;
   return HttpStatus.BAD_REQUEST;
 }

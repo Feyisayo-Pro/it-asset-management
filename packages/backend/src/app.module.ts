@@ -18,6 +18,7 @@ import { RbacModule } from './modules/rbac/rbac.module';
 import { AuditModule } from './modules/audit/audit.module';
 import { AssetModule } from './modules/asset/asset.module';
 import { WorkflowModule } from './modules/workflow/workflow.module';
+import { ReturnModule } from './modules/return/return.module';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { WorkflowModule } from './modules/workflow/workflow.module';
     AuthModule,
     AssetModule,
     WorkflowModule,
+    ReturnModule,
   ],
   providers: [
     { provide: APP_GUARD, useClass: ThrottlerGuard },

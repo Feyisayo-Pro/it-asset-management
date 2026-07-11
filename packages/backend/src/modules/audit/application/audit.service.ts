@@ -80,6 +80,11 @@ export class AuditService {
   @OnEvent('workflow.stage.completed')
   @OnEvent('workflow.completed')
   @OnEvent('workflow.bypassed')
+  @OnEvent('return.initiated')
+  @OnEvent('return.items-recorded')
+  @OnEvent('return.assessed')
+  @OnEvent('return.completed')
+  @OnEvent('return.cancelled')
   async onDomainEvent(event: DomainEvent): Promise<void> {
     const payload = event.payload as
       | { id?: string; assetId?: string; userId?: string; instanceId?: string }

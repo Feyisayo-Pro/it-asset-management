@@ -21,4 +21,9 @@ export const queryKeys = {
     definitions: ['workflows', 'definitions'] as const,
     instance: (id: string) => ['workflows', 'instance', id] as const,
   },
+  returns: {
+    all: ['returns'] as const,
+    list: (params: Record<string, unknown>) => ['returns', 'list', params] as const,
+    byId: (id: string) => ['returns', 'detail', id] as const,
+  },
 };
