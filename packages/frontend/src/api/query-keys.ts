@@ -26,4 +26,10 @@ export const queryKeys = {
     list: (params: Record<string, unknown>) => ['returns', 'list', params] as const,
     byId: (id: string) => ['returns', 'detail', id] as const,
   },
+  assessments: {
+    all: ['assessments'] as const,
+    templates: ['assessments', 'templates'] as const,
+    list: (params: Record<string, unknown>) => ['assessments', 'list', params] as const,
+    byId: (id: string) => ['assessments', 'detail', id] as const,
+  },
 };

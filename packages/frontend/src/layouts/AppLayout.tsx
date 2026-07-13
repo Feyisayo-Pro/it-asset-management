@@ -16,6 +16,7 @@ import {
   TeamOutlined,
   LaptopOutlined,
   RollbackOutlined,
+  FileDoneOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
 } from '@ant-design/icons';
@@ -45,6 +46,16 @@ export const AppLayout = () => {
       label: 'Returns',
       onClick: () => nav('/returns'),
     },
+    ...(roleName !== 'EMPLOYEE'
+      ? [
+          {
+            key: '/assessments',
+            icon: <FileDoneOutlined />,
+            label: 'Assessments',
+            onClick: () => nav('/assessments'),
+          },
+        ]
+      : []),
     ...(roleName === 'SUPER_ADMIN'
       ? [
           {

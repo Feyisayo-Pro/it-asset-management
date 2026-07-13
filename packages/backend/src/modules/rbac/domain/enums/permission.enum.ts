@@ -26,6 +26,10 @@ export const Permission = {
   // Audit
   AuditRead: 'audit:read',
 
+  // Assessment
+  AssessmentRead: 'assessment:read',
+  AssessmentManage: 'assessment:manage',
+
   // Workflow engine
   WorkflowRead: 'workflow:read',
   WorkflowConfigure: 'workflow:configure',

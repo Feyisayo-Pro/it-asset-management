@@ -19,6 +19,7 @@ import { AuditModule } from './modules/audit/audit.module';
 import { AssetModule } from './modules/asset/asset.module';
 import { WorkflowModule } from './modules/workflow/workflow.module';
 import { ReturnModule } from './modules/return/return.module';
+import { AssessmentModule } from './modules/assessment/assessment.module';
 
 @Module({
   imports: [
@@ -51,6 +52,7 @@ import { ReturnModule } from './modules/return/return.module';
     AssetModule,
     WorkflowModule,
     ReturnModule,
+    AssessmentModule,
   ],
   providers: [
     { provide: APP_GUARD, useClass: ThrottlerGuard },

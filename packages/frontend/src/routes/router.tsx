@@ -14,6 +14,9 @@ import { AssetImportPage } from '@/features/assets/pages/AssetImportPage';
 import { ReturnListPage } from '@/features/returns/pages/ReturnListPage';
 import { InitiateReturnPage } from '@/features/returns/pages/InitiateReturnPage';
 import { ReturnDetailPage } from '@/features/returns/pages/ReturnDetailPage';
+import { AssessmentListPage } from '@/features/assessments/pages/AssessmentListPage';
+import { StartAssessmentPage } from '@/features/assessments/pages/StartAssessmentPage';
+import { AssessmentDetailPage } from '@/features/assessments/pages/AssessmentDetailPage';
 import { RoleName } from '@/types/role';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 import { PermissionDeniedPage } from '@/pages/PermissionDeniedPage';
@@ -60,6 +63,9 @@ export const router = createBrowserRouter([
       { path: 'assets/import', element: <AssetImportPage /> },
       { path: 'assets/:id', element: <AssetDetailPage /> },
       { path: 'assets/:id/edit', element: <AssetEditPage /> },
+      { path: 'assessments', element: <AssessmentListPage /> },
+      { path: 'assessments/new', element: <StartAssessmentPage /> },
+      { path: 'assessments/:id', element: <AssessmentDetailPage /> },
     ],
   },
   {

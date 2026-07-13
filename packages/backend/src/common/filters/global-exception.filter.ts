@@ -150,5 +150,13 @@ function mapDomainToStatus(code: string): number {
   if (code === 'RETURN_ITEMS_REQUIRED') return HttpStatus.BAD_REQUEST;
   if (code === 'RETURN_ITEM_NOTES_REQUIRED') return HttpStatus.BAD_REQUEST;
   if (code === 'ASSESSMENT_INCOMPLETE') return HttpStatus.BAD_REQUEST;
+  if (code === 'ASSESSMENT_NOT_FOUND') return HttpStatus.NOT_FOUND;
+  if (code === 'ASSESSMENT_TEMPLATE_NOT_FOUND') return HttpStatus.NOT_FOUND;
+  if (code === 'ASSESSMENT_ALREADY_COMPLETED') return HttpStatus.CONFLICT;
+  if (code === 'UNKNOWN_CHECKLIST_ITEM') return HttpStatus.BAD_REQUEST;
+  if (code === 'CHECKLIST_INCOMPLETE') return HttpStatus.BAD_REQUEST;
+  if (code === 'FAILED_ITEM_NOTE_REQUIRED') return HttpStatus.BAD_REQUEST;
+  if (code === 'ASSESSMENT_SIGNATURE_REQUIRED') return HttpStatus.BAD_REQUEST;
+  if (code === 'RECOMMENDATIONS_REQUIRED') return HttpStatus.BAD_REQUEST;
   return HttpStatus.BAD_REQUEST;
 }
