@@ -1,0 +1,17 @@
+{
+  "name": "it-asset-management",
+  "private": true,
+  "version": "0.0.0",
+  "description": "IT Asset Lifecycle Management & Workflow Platform",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "backend:build": "npm --workspace @iam/backend run build",
+    "backend:start": "npm --workspace @iam/backend run start",
+    "backend:start:dev": "npm --workspace @iam/backend run start:dev",
+    "backend:test": "npm --workspace @iam/backend run test",
+    "backend:test:unit": "npm --workspace @iam/backend run test:unit",
+    "backend:migration:run": "npm --workspace @iam/backend run migration:run"
+  }
+}
