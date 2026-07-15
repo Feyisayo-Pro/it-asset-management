@@ -87,6 +87,13 @@ export class AuditService {
   @OnEvent('return.cancelled')
   @OnEvent('assessment.started')
   @OnEvent('assessment.completed')
+  @OnEvent('repair.opened')
+  @OnEvent('repair.status-changed')
+  @OnEvent('repair.completed')
+  @OnEvent('repair.beyond-repair')
+  @OnEvent('disposal.requested')
+  @OnEvent('disposal.approved')
+  @OnEvent('disposal.rejected')
   async onDomainEvent(event: DomainEvent): Promise<void> {
     const payload = event.payload as
       | { id?: string; assetId?: string; userId?: string; instanceId?: string }

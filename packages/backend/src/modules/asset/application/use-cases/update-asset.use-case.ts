@@ -5,12 +5,14 @@ import {
 } from '../../domain/repositories/asset.repository';
 import { CLOCK, Clock } from '../../../auth/application/ports/clock.port';
 import { Asset } from '../../domain/entities/asset.entity';
+import { AssetStatus } from '../../domain/value-objects/asset-status';
 import { EventPublisher } from '../../../../common/events/event-publisher';
 import { AssetUpdatedEvent } from '../../domain/events/asset.events';
 import {
   AssetNotFoundError,
   DuplicateImeiError,
 } from '../../../../common/errors/asset.errors';
+import { AssetAlreadyDisposedError } from '../../../../common/errors/disposal.errors';
 import { asyncContext } from '../../../../common/utils/async-context';
 
 export interface UpdateAssetCommand {
@@ -40,6 +42,12 @@ export class UpdateAssetUseCase {
   async execute(command: UpdateAssetCommand): Promise<Asset> {
     const asset = await this.assets.findById(command.assetId);
     if (!asset) throw new AssetNotFoundError(command.assetId);
+    // Disposed assets are immutable — their record is a permanent
+    // audit artefact (PROJECT_PROMPT §DISPOSAL). Reopen a dispute via
+    // the SA-only disposal-recovery flow, not by editing the row.
+    if (asset.status === AssetStatus.Disposed) {
+      throw new AssetAlreadyDisposedError(asset.id);
+    }
 
     if (command.imei && command.imei !== asset.imei) {
       const existing = await this.assets.findByImei(command.imei);

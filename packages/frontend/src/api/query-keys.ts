@@ -32,4 +32,16 @@ export const queryKeys = {
     list: (params: Record<string, unknown>) => ['assessments', 'list', params] as const,
     byId: (id: string) => ['assessments', 'detail', id] as const,
   },
+  repairs: {
+    all: ['repairs'] as const,
+    list: (params: Record<string, unknown>) => ['repairs', 'list', params] as const,
+    byId: (id: string) => ['repairs', 'detail', id] as const,
+    byAsset: (assetId: string) => ['repairs', 'by-asset', assetId] as const,
+  },
+  disposals: {
+    all: ['disposals'] as const,
+    list: (params: Record<string, unknown>) => ['disposals', 'list', params] as const,
+    byId: (id: string) => ['disposals', 'detail', id] as const,
+    byAsset: (assetId: string) => ['disposals', 'by-asset', assetId] as const,
+  },
 };

@@ -19,6 +19,8 @@ import {
   FileDoneOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
+  ToolOutlined,
+  DeleteOutlined,
 } from '@ant-design/icons';
 import { useAuth } from '@/hooks/useAuth';
 import { ROLE_COLOR, ROLE_LABEL, RoleName } from '@/types/role';
@@ -53,6 +55,18 @@ export const AppLayout = () => {
             icon: <FileDoneOutlined />,
             label: 'Assessments',
             onClick: () => nav('/assessments'),
+          },
+          {
+            key: '/repairs',
+            icon: <ToolOutlined />,
+            label: 'Repairs',
+            onClick: () => nav('/repairs'),
+          },
+          {
+            key: '/disposals',
+            icon: <DeleteOutlined />,
+            label: 'Disposals',
+            onClick: () => nav('/disposals'),
           },
         ]
       : []),

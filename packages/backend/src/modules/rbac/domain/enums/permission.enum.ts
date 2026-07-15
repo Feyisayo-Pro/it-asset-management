@@ -30,6 +30,15 @@ export const Permission = {
   AssessmentRead: 'assessment:read',
   AssessmentManage: 'assessment:manage',
 
+  // Repair
+  RepairRead: 'repair:read',
+  RepairManage: 'repair:manage',
+
+  // Disposal
+  DisposalRead: 'disposal:read',
+  DisposalRequest: 'disposal:request',
+  DisposalApprove: 'disposal:approve',
+
   // Workflow engine
   WorkflowRead: 'workflow:read',
   WorkflowConfigure: 'workflow:configure',

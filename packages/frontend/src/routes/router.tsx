@@ -17,6 +17,12 @@ import { ReturnDetailPage } from '@/features/returns/pages/ReturnDetailPage';
 import { AssessmentListPage } from '@/features/assessments/pages/AssessmentListPage';
 import { StartAssessmentPage } from '@/features/assessments/pages/StartAssessmentPage';
 import { AssessmentDetailPage } from '@/features/assessments/pages/AssessmentDetailPage';
+import { RepairListPage } from '@/features/repairs/pages/RepairListPage';
+import { OpenRepairPage } from '@/features/repairs/pages/OpenRepairPage';
+import { RepairDetailPage } from '@/features/repairs/pages/RepairDetailPage';
+import { DisposalListPage } from '@/features/disposals/pages/DisposalListPage';
+import { RequestDisposalPage } from '@/features/disposals/pages/RequestDisposalPage';
+import { DisposalDetailPage } from '@/features/disposals/pages/DisposalDetailPage';
 import { RoleName } from '@/types/role';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 import { PermissionDeniedPage } from '@/pages/PermissionDeniedPage';
@@ -66,6 +72,12 @@ export const router = createBrowserRouter([
       { path: 'assessments', element: <AssessmentListPage /> },
       { path: 'assessments/new', element: <StartAssessmentPage /> },
       { path: 'assessments/:id', element: <AssessmentDetailPage /> },
+      { path: 'repairs', element: <RepairListPage /> },
+      { path: 'repairs/new', element: <OpenRepairPage /> },
+      { path: 'repairs/:id', element: <RepairDetailPage /> },
+      { path: 'disposals', element: <DisposalListPage /> },
+      { path: 'disposals/new', element: <RequestDisposalPage /> },
+      { path: 'disposals/:id', element: <DisposalDetailPage /> },
     ],
   },
   {

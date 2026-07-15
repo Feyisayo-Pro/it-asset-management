@@ -20,6 +20,8 @@ import { AssetModule } from './modules/asset/asset.module';
 import { WorkflowModule } from './modules/workflow/workflow.module';
 import { ReturnModule } from './modules/return/return.module';
 import { AssessmentModule } from './modules/assessment/assessment.module';
+import { RepairModule } from './modules/repair/repair.module';
+import { DisposalModule } from './modules/disposal/disposal.module';
 
 @Module({
   imports: [
@@ -53,6 +55,8 @@ import { AssessmentModule } from './modules/assessment/assessment.module';
     WorkflowModule,
     ReturnModule,
     AssessmentModule,
+    RepairModule,
+    DisposalModule,
   ],
   providers: [
     { provide: APP_GUARD, useClass: ThrottlerGuard },
