@@ -1,4 +1,4 @@
-import { IsEnum, IsOptional, IsString, IsUUID } from 'class-validator';
+import { IsDateString, IsEnum, IsOptional, IsString, IsUUID } from 'class-validator';
 
 export const ReportType = {
   Inventory: 'inventory',
@@ -25,11 +25,11 @@ export type ExportFormat = (typeof ExportFormat)[keyof typeof ExportFormat];
 
 export class ReportFiltersQuery {
   @IsOptional()
-  @IsString()
+  @IsDateString()
   dateFrom?: string;
 
   @IsOptional()
-  @IsString()
+  @IsDateString()
   dateTo?: string;
 
   @IsOptional()

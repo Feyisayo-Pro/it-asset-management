@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectEntityManager } from '@nestjs/typeorm';
 import { EntityManager } from 'typeorm';
+import { TtlCache } from '../../../common/utils/ttl-cache';
 import {
   DashboardFilters,
   UserContext,
@@ -18,8 +19,12 @@ import {
   RecentAssetItem,
 } from '../presentation/dto/dashboard.dtos';
 
+const FILTER_OPTIONS_TTL = 5 * 60 * 1000;
+
 @Injectable()
 export class EnterpriseDashboardService {
+  private readonly cache = new TtlCache();
+
   constructor(
     @InjectEntityManager() private readonly em: EntityManager,
   ) {}
@@ -166,23 +171,25 @@ export class EnterpriseDashboardService {
     offices: string[];
     assetTypes: string[];
   }> {
-    const [deptRows, officeRows, typeRows] = await Promise.all([
-      this.em.query(
-        `SELECT DISTINCT "department" AS val FROM "assets" WHERE "department" IS NOT NULL ORDER BY "department"`,
-      ),
-      this.em.query(
-        `SELECT DISTINCT "office_location" AS val FROM "assets" WHERE "office_location" IS NOT NULL ORDER BY "office_location"`,
-      ),
-      this.em.query(
-        `SELECT DISTINCT "device_type" AS val FROM "assets" WHERE "device_type" IS NOT NULL ORDER BY "device_type"`,
-      ),
-    ]);
+    return this.cache.getOrSet('filterOptions', FILTER_OPTIONS_TTL, async () => {
+      const [deptRows, officeRows, typeRows] = await Promise.all([
+        this.em.query(
+          `SELECT DISTINCT "department" AS val FROM "assets" WHERE "department" IS NOT NULL ORDER BY "department"`,
+        ),
+        this.em.query(
+          `SELECT DISTINCT "office_location" AS val FROM "assets" WHERE "office_location" IS NOT NULL ORDER BY "office_location"`,
+        ),
+        this.em.query(
+          `SELECT DISTINCT "device_type" AS val FROM "assets" WHERE "device_type" IS NOT NULL ORDER BY "device_type"`,
+        ),
+      ]);
 
-    return {
-      departments: deptRows.map((r: { val: string }) => r.val),
-      offices: officeRows.map((r: { val: string }) => r.val),
-      assetTypes: typeRows.map((r: { val: string }) => r.val),
-    };
+      return {
+        departments: deptRows.map((r: { val: string }) => r.val),
+        offices: officeRows.map((r: { val: string }) => r.val),
+        assetTypes: typeRows.map((r: { val: string }) => r.val),
+      };
+    });
   }
 
   // ── KPI helpers ──────────────────────────────────────────────

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Card, Skeleton, Typography } from 'antd';
 import { PageHeader } from '@/components/PageHeader';
+import { QueryErrorAlert } from '@/components/QueryErrorAlert';
 import { DashboardFilters } from '@/api/dashboard.api';
 import { useAuthStore } from '@/stores/auth.store';
 import { RoleName } from '@/types/role';
@@ -27,11 +28,23 @@ export const EnterpriseDashboardPage = () => {
   const roleName = (user?.roleName ?? 'EMPLOYEE') as RoleName;
   const isEmployee = roleName === RoleName.EMPLOYEE;
 
-  const { data, isLoading } = useEnterpriseDashboard(filters);
+  const { data, isLoading, isError, refetch } = useEnterpriseDashboard(filters);
   const filterOptionsQuery = useDashboardFilterOptions();
 
   const subtitle =
     ROLE_SUBTITLES[roleName] ?? 'Dashboard';
+
+  if (isError) {
+    return (
+      <div>
+        <PageHeader
+          title={`Welcome, ${user?.email?.split('@')[0] ?? 'User'}`}
+          subtitle={subtitle}
+        />
+        <QueryErrorAlert message="Failed to load dashboard data." onRetry={() => void refetch()} />
+      </div>
+    );
+  }
 
   if (isLoading || !data) {
     return (

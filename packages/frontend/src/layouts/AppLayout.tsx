@@ -180,6 +180,7 @@ export const AppLayout = () => {
             type="text"
             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
             onClick={() => setCollapsed(!collapsed)}
+            aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           />
           <Space size={16}>
             <NotificationBell onClick={() => setDrawerOpen(true)} />

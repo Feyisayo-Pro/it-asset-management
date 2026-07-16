@@ -37,7 +37,7 @@ export const LoginPage = () => {
   };
 
   return (
-    <Card style={{ width: 400 }} bordered>
+    <Card style={{ maxWidth: 400, width: '100%' }} bordered>
       <Space direction="vertical" size="large" style={{ width: '100%' }}>
         <div style={{ textAlign: 'center' }}>
           <Typography.Title level={3} style={{ marginBottom: 0 }}>
