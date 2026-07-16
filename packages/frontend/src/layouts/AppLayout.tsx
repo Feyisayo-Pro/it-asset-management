@@ -16,11 +16,19 @@ import {
   TeamOutlined,
   LaptopOutlined,
   RollbackOutlined,
+  FileDoneOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
+  ToolOutlined,
+  DeleteOutlined,
+  BarChartOutlined,
+  UnorderedListOutlined,
+  DashboardOutlined,
 } from '@ant-design/icons';
 import { useAuth } from '@/hooks/useAuth';
 import { ROLE_COLOR, ROLE_LABEL, RoleName } from '@/types/role';
+import { NotificationBell } from '@/features/notifications/components/NotificationBell';
+import { NotificationDrawer } from '@/features/notifications/components/NotificationDrawer';
 
 const { Header, Sider, Content } = Layout;
 
@@ -29,10 +37,21 @@ export const AppLayout = () => {
   const location = useLocation();
   const { user, logout } = useAuth();
   const [collapsed, setCollapsed] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const roleName = user?.roleName as RoleName;
 
   const menuItems = [
+    ...(roleName !== 'EMPLOYEE'
+      ? [
+          {
+            key: '/dashboard',
+            icon: <DashboardOutlined />,
+            label: 'Dashboard',
+            onClick: () => nav('/dashboard'),
+          },
+        ]
+      : []),
     {
       key: '/assets',
       icon: <LaptopOutlined />,
@@ -44,6 +63,40 @@ export const AppLayout = () => {
       icon: <RollbackOutlined />,
       label: 'Returns',
       onClick: () => nav('/returns'),
+    },
+    ...(roleName !== 'EMPLOYEE'
+      ? [
+          {
+            key: '/assessments',
+            icon: <FileDoneOutlined />,
+            label: 'Assessments',
+            onClick: () => nav('/assessments'),
+          },
+          {
+            key: '/repairs',
+            icon: <ToolOutlined />,
+            label: 'Repairs',
+            onClick: () => nav('/repairs'),
+          },
+          {
+            key: '/disposals',
+            icon: <DeleteOutlined />,
+            label: 'Disposals',
+            onClick: () => nav('/disposals'),
+          },
+          {
+            key: '/reports',
+            icon: <BarChartOutlined />,
+            label: 'Reports',
+            onClick: () => nav('/reports'),
+          },
+        ]
+      : []),
+    {
+      key: '/activity',
+      icon: <UnorderedListOutlined />,
+      label: 'Activity Feed',
+      onClick: () => nav('/activity'),
     },
     ...(roleName === 'SUPER_ADMIN'
       ? [
@@ -132,17 +185,21 @@ export const AppLayout = () => {
             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
             onClick={() => setCollapsed(!collapsed)}
           />
-          <Dropdown menu={userMenu} placement="bottomRight" trigger={['click']}>
-            <Space style={{ cursor: 'pointer' }}>
-              <Avatar icon={<UserOutlined />} />
-              <Typography.Text>{user?.email}</Typography.Text>
-            </Space>
-          </Dropdown>
+          <Space size={16}>
+            <NotificationBell onClick={() => setDrawerOpen(true)} />
+            <Dropdown menu={userMenu} placement="bottomRight" trigger={['click']}>
+              <Space style={{ cursor: 'pointer' }}>
+                <Avatar icon={<UserOutlined />} />
+                <Typography.Text>{user?.email}</Typography.Text>
+              </Space>
+            </Dropdown>
+          </Space>
         </Header>
         <Content style={{ padding: 24, background: '#f5f7fa' }}>
           <Outlet />
         </Content>
       </Layout>
+      <NotificationDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
     </Layout>
   );
 };

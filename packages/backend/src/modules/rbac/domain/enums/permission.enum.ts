@@ -26,11 +26,32 @@ export const Permission = {
   // Audit
   AuditRead: 'audit:read',
 
+  // Assessment
+  AssessmentRead: 'assessment:read',
+  AssessmentManage: 'assessment:manage',
+
+  // Repair
+  RepairRead: 'repair:read',
+  RepairManage: 'repair:manage',
+
+  // Disposal
+  DisposalRead: 'disposal:read',
+  DisposalRequest: 'disposal:request',
+  DisposalApprove: 'disposal:approve',
+
   // Workflow engine
   WorkflowRead: 'workflow:read',
   WorkflowConfigure: 'workflow:configure',
   WorkflowTransition: 'workflow:transition',
   WorkflowBypass: 'workflow:bypass',
+
+  // Notification
+  NotificationRead: 'notification:read',
+  NotificationManage: 'notification:manage',
+
+  // Reporting
+  ReportRead: 'report:read',
+  ReportExport: 'report:export',
 } as const;
 
 export type Permission = (typeof Permission)[keyof typeof Permission];

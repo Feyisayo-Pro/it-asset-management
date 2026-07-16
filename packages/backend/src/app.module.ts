@@ -19,6 +19,11 @@ import { AuditModule } from './modules/audit/audit.module';
 import { AssetModule } from './modules/asset/asset.module';
 import { WorkflowModule } from './modules/workflow/workflow.module';
 import { ReturnModule } from './modules/return/return.module';
+import { AssessmentModule } from './modules/assessment/assessment.module';
+import { RepairModule } from './modules/repair/repair.module';
+import { DisposalModule } from './modules/disposal/disposal.module';
+import { NotificationModule } from './modules/notification/notification.module';
+import { ReportingModule } from './modules/reporting/reporting.module';
 
 @Module({
   imports: [
@@ -51,6 +56,11 @@ import { ReturnModule } from './modules/return/return.module';
     AssetModule,
     WorkflowModule,
     ReturnModule,
+    AssessmentModule,
+    RepairModule,
+    DisposalModule,
+    NotificationModule,
+    ReportingModule,
   ],
   providers: [
     { provide: APP_GUARD, useClass: ThrottlerGuard },

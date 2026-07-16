@@ -4,3 +4,6 @@ export * from './user.errors';
 export * from './asset.errors';
 export * from './workflow.errors';
 export * from './return.errors';
+export * from './assessment.errors';
+export * from './repair.errors';
+export * from './disposal.errors';

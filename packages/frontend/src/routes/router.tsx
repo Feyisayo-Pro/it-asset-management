@@ -14,6 +14,18 @@ import { AssetImportPage } from '@/features/assets/pages/AssetImportPage';
 import { ReturnListPage } from '@/features/returns/pages/ReturnListPage';
 import { InitiateReturnPage } from '@/features/returns/pages/InitiateReturnPage';
 import { ReturnDetailPage } from '@/features/returns/pages/ReturnDetailPage';
+import { AssessmentListPage } from '@/features/assessments/pages/AssessmentListPage';
+import { StartAssessmentPage } from '@/features/assessments/pages/StartAssessmentPage';
+import { AssessmentDetailPage } from '@/features/assessments/pages/AssessmentDetailPage';
+import { RepairListPage } from '@/features/repairs/pages/RepairListPage';
+import { OpenRepairPage } from '@/features/repairs/pages/OpenRepairPage';
+import { RepairDetailPage } from '@/features/repairs/pages/RepairDetailPage';
+import { DisposalListPage } from '@/features/disposals/pages/DisposalListPage';
+import { RequestDisposalPage } from '@/features/disposals/pages/RequestDisposalPage';
+import { DisposalDetailPage } from '@/features/disposals/pages/DisposalDetailPage';
+import { ActivityFeedPage } from '@/features/notifications/pages/ActivityFeedPage';
+import { DashboardPage } from '@/features/reports/pages/DashboardPage';
+import { ReportPage } from '@/features/reports/pages/ReportPage';
 import { RoleName } from '@/types/role';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 import { PermissionDeniedPage } from '@/pages/PermissionDeniedPage';
@@ -55,11 +67,22 @@ export const router = createBrowserRouter([
       </ProtectedRoute>
     ),
     children: [
+      { path: 'dashboard', element: <DashboardPage /> },
       { path: 'assets', element: <AssetListPage /> },
       { path: 'assets/new', element: <AssetCreatePage /> },
       { path: 'assets/import', element: <AssetImportPage /> },
       { path: 'assets/:id', element: <AssetDetailPage /> },
       { path: 'assets/:id/edit', element: <AssetEditPage /> },
+      { path: 'assessments', element: <AssessmentListPage /> },
+      { path: 'assessments/new', element: <StartAssessmentPage /> },
+      { path: 'assessments/:id', element: <AssessmentDetailPage /> },
+      { path: 'repairs', element: <RepairListPage /> },
+      { path: 'repairs/new', element: <OpenRepairPage /> },
+      { path: 'repairs/:id', element: <RepairDetailPage /> },
+      { path: 'disposals', element: <DisposalListPage /> },
+      { path: 'disposals/new', element: <RequestDisposalPage /> },
+      { path: 'disposals/:id', element: <DisposalDetailPage /> },
+      { path: 'reports', element: <ReportPage /> },
     ],
   },
   {
@@ -73,6 +96,7 @@ export const router = createBrowserRouter([
       { path: 'returns', element: <ReturnListPage /> },
       { path: 'returns/new', element: <InitiateReturnPage /> },
       { path: 'returns/:id', element: <ReturnDetailPage /> },
+      { path: 'activity', element: <ActivityFeedPage /> },
     ],
   },
   { path: '/403', element: <PermissionDeniedPage /> },

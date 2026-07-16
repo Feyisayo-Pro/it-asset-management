@@ -150,5 +150,28 @@ function mapDomainToStatus(code: string): number {
   if (code === 'RETURN_ITEMS_REQUIRED') return HttpStatus.BAD_REQUEST;
   if (code === 'RETURN_ITEM_NOTES_REQUIRED') return HttpStatus.BAD_REQUEST;
   if (code === 'ASSESSMENT_INCOMPLETE') return HttpStatus.BAD_REQUEST;
+  if (code === 'ASSESSMENT_NOT_FOUND') return HttpStatus.NOT_FOUND;
+  if (code === 'ASSESSMENT_TEMPLATE_NOT_FOUND') return HttpStatus.NOT_FOUND;
+  if (code === 'ASSESSMENT_ALREADY_COMPLETED') return HttpStatus.CONFLICT;
+  if (code === 'UNKNOWN_CHECKLIST_ITEM') return HttpStatus.BAD_REQUEST;
+  if (code === 'CHECKLIST_INCOMPLETE') return HttpStatus.BAD_REQUEST;
+  if (code === 'FAILED_ITEM_NOTE_REQUIRED') return HttpStatus.BAD_REQUEST;
+  if (code === 'ASSESSMENT_SIGNATURE_REQUIRED') return HttpStatus.BAD_REQUEST;
+  if (code === 'RECOMMENDATIONS_REQUIRED') return HttpStatus.BAD_REQUEST;
+  if (code === 'REPAIR_NOT_FOUND') return HttpStatus.NOT_FOUND;
+  if (code === 'ACTIVE_REPAIR_EXISTS') return HttpStatus.CONFLICT;
+  if (code === 'INVALID_REPAIR_STATUS_TRANSITION') return HttpStatus.CONFLICT;
+  if (code === 'REPAIR_ALREADY_TERMINAL') return HttpStatus.CONFLICT;
+  if (code === 'REPAIR_COMPLETION_MISSING_DATA') return HttpStatus.BAD_REQUEST;
+  if (code === 'DISPOSAL_NOT_FOUND') return HttpStatus.NOT_FOUND;
+  if (code === 'ACTIVE_DISPOSAL_EXISTS') return HttpStatus.CONFLICT;
+  if (code === 'ASSET_ALREADY_DISPOSED') return HttpStatus.CONFLICT;
+  if (code === 'DISPOSAL_REQUESTER_CANNOT_APPROVE') return HttpStatus.FORBIDDEN;
+  if (code === 'DISPOSAL_ALREADY_RESOLVED') return HttpStatus.CONFLICT;
+  if (code === 'DISPOSAL_EVIDENCE_REQUIRED') return HttpStatus.BAD_REQUEST;
+  if (code === 'DISPOSAL_APPROVAL_SIGNATURE_REQUIRED') return HttpStatus.BAD_REQUEST;
+  if (code === 'DISPOSAL_REJECTION_REASON_REQUIRED') return HttpStatus.BAD_REQUEST;
+  if (code === 'NOTIFICATION_NOT_FOUND') return HttpStatus.NOT_FOUND;
+  if (code === 'NOTIFICATION_ACCESS_DENIED') return HttpStatus.FORBIDDEN;
   return HttpStatus.BAD_REQUEST;
 }
