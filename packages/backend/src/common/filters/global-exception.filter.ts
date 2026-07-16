@@ -171,5 +171,7 @@ function mapDomainToStatus(code: string): number {
   if (code === 'DISPOSAL_EVIDENCE_REQUIRED') return HttpStatus.BAD_REQUEST;
   if (code === 'DISPOSAL_APPROVAL_SIGNATURE_REQUIRED') return HttpStatus.BAD_REQUEST;
   if (code === 'DISPOSAL_REJECTION_REASON_REQUIRED') return HttpStatus.BAD_REQUEST;
+  if (code === 'NOTIFICATION_NOT_FOUND') return HttpStatus.NOT_FOUND;
+  if (code === 'NOTIFICATION_ACCESS_DENIED') return HttpStatus.FORBIDDEN;
   return HttpStatus.BAD_REQUEST;
 }

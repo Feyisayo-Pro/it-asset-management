@@ -44,4 +44,15 @@ export const queryKeys = {
     byId: (id: string) => ['disposals', 'detail', id] as const,
     byAsset: (assetId: string) => ['disposals', 'by-asset', assetId] as const,
   },
+  notifications: {
+    all: ['notifications'] as const,
+    list: (params: Record<string, unknown>) => ['notifications', 'list', params] as const,
+    unreadCount: ['notifications', 'unread-count'] as const,
+  },
+  reports: {
+    all: ['reports'] as const,
+    byType: (type: string, params?: Record<string, unknown>) =>
+      ['reports', type, params] as const,
+    dashboard: ['reports', 'dashboard'] as const,
+  },
 };

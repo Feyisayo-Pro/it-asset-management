@@ -23,6 +23,9 @@ import { RepairDetailPage } from '@/features/repairs/pages/RepairDetailPage';
 import { DisposalListPage } from '@/features/disposals/pages/DisposalListPage';
 import { RequestDisposalPage } from '@/features/disposals/pages/RequestDisposalPage';
 import { DisposalDetailPage } from '@/features/disposals/pages/DisposalDetailPage';
+import { ActivityFeedPage } from '@/features/notifications/pages/ActivityFeedPage';
+import { DashboardPage } from '@/features/reports/pages/DashboardPage';
+import { ReportPage } from '@/features/reports/pages/ReportPage';
 import { RoleName } from '@/types/role';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 import { PermissionDeniedPage } from '@/pages/PermissionDeniedPage';
@@ -64,6 +67,7 @@ export const router = createBrowserRouter([
       </ProtectedRoute>
     ),
     children: [
+      { path: 'dashboard', element: <DashboardPage /> },
       { path: 'assets', element: <AssetListPage /> },
       { path: 'assets/new', element: <AssetCreatePage /> },
       { path: 'assets/import', element: <AssetImportPage /> },
@@ -78,6 +82,7 @@ export const router = createBrowserRouter([
       { path: 'disposals', element: <DisposalListPage /> },
       { path: 'disposals/new', element: <RequestDisposalPage /> },
       { path: 'disposals/:id', element: <DisposalDetailPage /> },
+      { path: 'reports', element: <ReportPage /> },
     ],
   },
   {
@@ -91,6 +96,7 @@ export const router = createBrowserRouter([
       { path: 'returns', element: <ReturnListPage /> },
       { path: 'returns/new', element: <InitiateReturnPage /> },
       { path: 'returns/:id', element: <ReturnDetailPage /> },
+      { path: 'activity', element: <ActivityFeedPage /> },
     ],
   },
   { path: '/403', element: <PermissionDeniedPage /> },

@@ -44,6 +44,14 @@ export const Permission = {
   WorkflowConfigure: 'workflow:configure',
   WorkflowTransition: 'workflow:transition',
   WorkflowBypass: 'workflow:bypass',
+
+  // Notification
+  NotificationRead: 'notification:read',
+  NotificationManage: 'notification:manage',
+
+  // Reporting
+  ReportRead: 'report:read',
+  ReportExport: 'report:export',
 } as const;
 
 export type Permission = (typeof Permission)[keyof typeof Permission];
