@@ -42,16 +42,12 @@ export const AppLayout = () => {
   const roleName = user?.roleName as RoleName;
 
   const menuItems = [
-    ...(roleName !== 'EMPLOYEE'
-      ? [
-          {
-            key: '/dashboard',
-            icon: <DashboardOutlined />,
-            label: 'Dashboard',
-            onClick: () => nav('/dashboard'),
-          },
-        ]
-      : []),
+    {
+      key: '/dashboard',
+      icon: <DashboardOutlined />,
+      label: 'Dashboard',
+      onClick: () => nav('/dashboard'),
+    },
     {
       key: '/assets',
       icon: <LaptopOutlined />,

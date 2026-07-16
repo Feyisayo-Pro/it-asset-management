@@ -26,6 +26,7 @@ import { DisposalDetailPage } from '@/features/disposals/pages/DisposalDetailPag
 import { ActivityFeedPage } from '@/features/notifications/pages/ActivityFeedPage';
 import { DashboardPage } from '@/features/reports/pages/DashboardPage';
 import { ReportPage } from '@/features/reports/pages/ReportPage';
+import { EnterpriseDashboardPage } from '@/features/dashboard/pages/EnterpriseDashboardPage';
 import { RoleName } from '@/types/role';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 import { PermissionDeniedPage } from '@/pages/PermissionDeniedPage';
@@ -67,7 +68,7 @@ export const router = createBrowserRouter([
       </ProtectedRoute>
     ),
     children: [
-      { path: 'dashboard', element: <DashboardPage /> },
+      { path: 'dashboard/analytics', element: <DashboardPage /> },
       { path: 'assets', element: <AssetListPage /> },
       { path: 'assets/new', element: <AssetCreatePage /> },
       { path: 'assets/import', element: <AssetImportPage /> },
@@ -93,6 +94,7 @@ export const router = createBrowserRouter([
       </ProtectedRoute>
     ),
     children: [
+      { path: 'dashboard', element: <EnterpriseDashboardPage /> },
       { path: 'returns', element: <ReturnListPage /> },
       { path: 'returns/new', element: <InitiateReturnPage /> },
       { path: 'returns/:id', element: <ReturnDetailPage /> },

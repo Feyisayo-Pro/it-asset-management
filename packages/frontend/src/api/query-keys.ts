@@ -55,4 +55,10 @@ export const queryKeys = {
       ['reports', type, params] as const,
     dashboard: ['reports', 'dashboard'] as const,
   },
+  enterpriseDashboard: {
+    all: ['enterprise-dashboard'] as const,
+    data: (params?: Record<string, unknown>) =>
+      ['enterprise-dashboard', 'data', params] as const,
+    filterOptions: ['enterprise-dashboard', 'filter-options'] as const,
+  },
 };
