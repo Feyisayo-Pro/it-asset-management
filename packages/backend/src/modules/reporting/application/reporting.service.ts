@@ -28,8 +28,8 @@ export class ReportingService {
       `SELECT a."status", COUNT(*)::text AS count FROM "assets" a ${whereClause} GROUP BY a."status" ORDER BY count DESC`,
       params,
     );
-    const byType: Array<{ asset_type: string; count: string }> = await this.em.query(
-      `SELECT a."asset_type" AS asset_type, COUNT(*)::text AS count FROM "assets" a ${whereClause} GROUP BY a."asset_type" ORDER BY count DESC`,
+    const byType: Array<{ device_type: string; count: string }> = await this.em.query(
+      `SELECT a."device_type" AS device_type, COUNT(*)::text AS count FROM "assets" a ${whereClause} GROUP BY a."device_type" ORDER BY count DESC`,
       params,
     );
     const byBrand: Array<{ brand: string; count: string }> = await this.em.query(
@@ -43,13 +43,13 @@ export class ReportingService {
       generatedAt: new Date().toISOString(),
       total,
       byStatus: summary.map((r) => ({ status: r.status, count: parseInt(r.count, 10) })),
-      byType: byType.map((r) => ({ assetType: r.asset_type, count: parseInt(r.count, 10) })),
+      byType: byType.map((r) => ({ assetType: r.device_type, count: parseInt(r.count, 10) })),
       byBrand: byBrand.map((r) => ({ brand: r.brand, count: parseInt(r.count, 10) })),
     };
   }
 
   async allocationReport(filters: ReportFilters) {
-    const where = [`wi."definition_key" = 'asset-allocation'`];
+    const where = [`wd."key" = 'asset-allocation'`];
     const params: unknown[] = [];
     if (filters.dateFrom) {
       params.push(filters.dateFrom);
@@ -73,6 +73,7 @@ export class ReportingService {
         COUNT(*) FILTER (WHERE wi."current_state" ILIKE '%approved%' OR wi."current_state" ILIKE '%complete%')::text AS approved,
         COUNT(*) FILTER (WHERE wi."current_state" ILIKE '%rejected%')::text AS rejected
        FROM "workflow_instances" wi
+       JOIN "workflow_definitions" wd ON wd."id" = wi."definition_id"
        WHERE ${where.join(' AND ')}
        GROUP BY month ORDER BY month DESC`,
       params,
@@ -224,17 +225,17 @@ export class ReportingService {
     const rows: Array<{
       asset_id: string; asset_tag: string; serial_number: string;
       brand: string; model: string; from_status: string; to_status: string;
-      reason: string; changed_at: string;
+      reason: string; occurred_at: string;
     }> = await this.em.query(
       `SELECT
         ash."asset_id", a."asset_tag", a."serial_number", a."brand", a."model",
         ash."from_status", ash."to_status", ash."reason",
-        ash."changed_at"::text AS changed_at
+        ash."occurred_at"::text AS occurred_at
        FROM "asset_status_history" ash
        JOIN "assets" a ON a."id" = ash."asset_id"
        WHERE ash."changed_by_user_id" = $1
           OR a."current_holder_id" = $1
-       ORDER BY ash."changed_at" DESC
+       ORDER BY ash."occurred_at" DESC
        LIMIT 500`,
       [employeeUserId],
     );
@@ -304,7 +305,7 @@ export class ReportingService {
   }
 
   async slaPerformance(filters: ReportFilters) {
-    const where: string[] = [`wi."definition_key" = 'asset-allocation'`];
+    const where: string[] = [`wd."key" = 'asset-allocation'`];
     const params: unknown[] = [];
     if (filters.dateFrom) {
       params.push(filters.dateFrom);
@@ -326,6 +327,7 @@ export class ReportingService {
         COUNT(*)::text AS total,
         COUNT(*) FILTER (WHERE wi."completed_at" IS NOT NULL)::text AS completed
        FROM "workflow_instances" wi
+       JOIN "workflow_definitions" wd ON wd."id" = wi."definition_id"
        WHERE ${where.join(' AND ')}`,
       params,
     );
@@ -371,7 +373,8 @@ export class ReportingService {
     const monthlyAllocations: Array<{ month: string; count: string }> = await this.em.query(
       `SELECT TO_CHAR(wi."created_at", 'YYYY-MM') AS month, COUNT(*)::text AS count
        FROM "workflow_instances" wi
-       WHERE wi."definition_key" = 'asset-allocation'
+       JOIN "workflow_definitions" wd ON wd."id" = wi."definition_id"
+       WHERE wd."key" = 'asset-allocation'
          AND wi."created_at" >= NOW() - INTERVAL '12 months'
        GROUP BY month ORDER BY month`,
     );
@@ -382,10 +385,10 @@ export class ReportingService {
        GROUP BY month ORDER BY month`,
     );
 
-    const assetDistribution: Array<{ asset_type: string; count: string }> = await this.em.query(
-      `SELECT "asset_type", COUNT(*)::text AS count FROM "assets"
+    const assetDistribution: Array<{ device_type: string; count: string }> = await this.em.query(
+      `SELECT "device_type", COUNT(*)::text AS count FROM "assets"
        WHERE "status" != 'Disposed'
-       GROUP BY "asset_type" ORDER BY count DESC`,
+       GROUP BY "device_type" ORDER BY count DESC`,
     );
 
     return {
@@ -411,7 +414,7 @@ export class ReportingService {
           count: parseInt(r.count, 10),
         })),
         assetDistribution: assetDistribution.map((r) => ({
-          assetType: r.asset_type,
+          assetType: r.device_type,
           count: parseInt(r.count, 10),
         })),
       },
@@ -425,7 +428,7 @@ export class ReportingService {
   ): void {
     if (filters.assetType) {
       params.push(filters.assetType);
-      where.push(`a."asset_type" = $${params.length}`);
+      where.push(`a."device_type" = $${params.length}`);
     }
     if (filters.brand) {
       params.push(filters.brand);

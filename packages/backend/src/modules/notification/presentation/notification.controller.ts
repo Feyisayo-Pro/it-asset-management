@@ -6,10 +6,9 @@ import {
   Patch,
   Post,
   Query,
-  Req,
 } from '@nestjs/common';
-import { Request } from 'express';
 import { RequirePermissions } from '../../../common/decorators/permissions.decorator';
+import { CurrentUser, AuthenticatedUser } from '../../../common/decorators/current-user.decorator';
 import { ListNotificationsUseCase } from '../application/use-cases/list-notifications.use-case';
 import { MarkNotificationReadUseCase } from '../application/use-cases/mark-read.use-case';
 import { ListNotificationsQuery } from './dto/notification.dtos';
@@ -24,10 +23,12 @@ export class NotificationController {
 
   @Get()
   @RequirePermissions('notification:read')
-  async list(@Query() query: ListNotificationsQuery, @Req() req: Request) {
-    const userId = (req as unknown as { user: { sub: string } }).user.sub;
+  async list(
+    @Query() query: ListNotificationsQuery,
+    @CurrentUser() user: AuthenticatedUser,
+  ) {
     const result = await this.listUC.execute({
-      recipientUserId: userId,
+      recipientUserId: user.id,
       page: query.page,
       pageSize: query.pageSize,
       unreadOnly: query.unreadOnly,
@@ -43,9 +44,8 @@ export class NotificationController {
 
   @Get('unread-count')
   @RequirePermissions('notification:read')
-  async unreadCount(@Req() req: Request) {
-    const userId = (req as unknown as { user: { sub: string } }).user.sub;
-    const count = await this.listUC.countUnread(userId);
+  async unreadCount(@CurrentUser() user: AuthenticatedUser) {
+    const count = await this.listUC.countUnread(user.id);
     return { count };
   }
 
@@ -53,18 +53,16 @@ export class NotificationController {
   @RequirePermissions('notification:read')
   async markRead(
     @Param('id', ParseUUIDPipe) id: string,
-    @Req() req: Request,
+    @CurrentUser() user: AuthenticatedUser,
   ) {
-    const userId = (req as unknown as { user: { sub: string } }).user.sub;
-    await this.markReadUC.markOne(id, userId);
+    await this.markReadUC.markOne(id, user.id);
     return { message: 'Marked as read' };
   }
 
   @Post('mark-all-read')
   @RequirePermissions('notification:read')
-  async markAllRead(@Req() req: Request) {
-    const userId = (req as unknown as { user: { sub: string } }).user.sub;
-    const count = await this.markReadUC.markAll(userId);
+  async markAllRead(@CurrentUser() user: AuthenticatedUser) {
+    const count = await this.markReadUC.markAll(user.id);
     return { message: 'All notifications marked as read', count };
   }
 }

@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query, Res } from '@nestjs/common';
+import { Controller, Get, Param, ParseUUIDPipe, Query, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { RequirePermissions } from '../../../common/decorators/permissions.decorator';
 import { ReportingService } from '../application/reporting.service';
@@ -48,7 +48,7 @@ export class ReportingController {
 
   @Get('employee-asset-history/:userId')
   @RequirePermissions('report:read')
-  employeeHistory(@Param('userId') userId: string) {
+  employeeHistory(@Param('userId', ParseUUIDPipe) userId: string) {
     return this.reportingService.employeeAssetHistory(userId);
   }
 

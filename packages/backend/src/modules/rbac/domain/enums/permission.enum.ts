@@ -52,6 +52,9 @@ export const Permission = {
   // Reporting
   ReportRead: 'report:read',
   ReportExport: 'report:export',
+
+  // Dashboard
+  DashboardRead: 'dashboard:read',
 } as const;
 
 export type Permission = (typeof Permission)[keyof typeof Permission];

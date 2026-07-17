@@ -1,12 +1,10 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { CorrelationIdMiddleware } from './middleware/correlation-id.middleware';
 import { EventPublisher } from './events/event-publisher';
+import { HealthController } from './controllers/health.controller';
 
-/**
- * CommonModule — wires the shared kernel. Middleware here runs for
- * every route; providers are exported so other modules can inject them.
- */
 @Module({
+  controllers: [HealthController],
   providers: [EventPublisher],
   exports: [EventPublisher],
 })

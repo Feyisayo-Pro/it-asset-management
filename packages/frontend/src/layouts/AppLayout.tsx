@@ -42,16 +42,12 @@ export const AppLayout = () => {
   const roleName = user?.roleName as RoleName;
 
   const menuItems = [
-    ...(roleName !== 'EMPLOYEE'
-      ? [
-          {
-            key: '/dashboard',
-            icon: <DashboardOutlined />,
-            label: 'Dashboard',
-            onClick: () => nav('/dashboard'),
-          },
-        ]
-      : []),
+    {
+      key: '/dashboard',
+      icon: <DashboardOutlined />,
+      label: 'Dashboard',
+      onClick: () => nav('/dashboard'),
+    },
     {
       key: '/assets',
       icon: <LaptopOutlined />,
@@ -184,6 +180,7 @@ export const AppLayout = () => {
             type="text"
             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
             onClick={() => setCollapsed(!collapsed)}
+            aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           />
           <Space size={16}>
             <NotificationBell onClick={() => setDrawerOpen(true)} />

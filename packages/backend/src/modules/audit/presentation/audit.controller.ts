@@ -1,5 +1,5 @@
 import { Controller, Get, Param, ParseUUIDPipe, Query } from '@nestjs/common';
-import { IsEnum, IsInt, IsOptional, IsString, IsUUID, Max, Min } from 'class-validator';
+import { IsDate, IsInt, IsOptional, IsString, IsUUID, Max, Min } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
 import { Inject } from '@nestjs/common';
 import { Roles } from '../../../common/decorators/roles.decorator';
@@ -43,14 +43,14 @@ class AuditQueryDto {
 
   @IsOptional()
   @Transform(({ value }) => (typeof value === 'string' ? new Date(value) : value))
+  @IsDate()
   from?: Date;
 
   @IsOptional()
   @Transform(({ value }) => (typeof value === 'string' ? new Date(value) : value))
+  @IsDate()
   to?: Date;
 }
-// silence unused-import warning for enum decorators kept for future use
-void IsEnum;
 
 @Controller('audit-logs')
 @Roles(RoleName.SUPER_ADMIN)

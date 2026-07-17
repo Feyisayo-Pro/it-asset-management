@@ -42,11 +42,14 @@ const OUTCOMES: AssessmentOutcome[] = [
 ];
 
 interface DraftItem {
+  _key: number;
   itemType: ReturnItemType;
   description?: string;
   status: ReturnItemStatus;
   notes?: string;
 }
+
+let _nextDraftKey = 1;
 
 export const ReturnDetailPage = () => {
   const { id = '' } = useParams<{ id: string }>();
@@ -58,7 +61,7 @@ export const ReturnDetailPage = () => {
   const cancel = useCancelReturn(id);
 
   const [draftItems, setDraftItems] = useState<DraftItem[]>([
-    { itemType: 'Laptop', status: 'Returned' },
+    { _key: _nextDraftKey++, itemType: 'Laptop', status: 'Returned' },
   ]);
   const [signModal, setSignModal] = useState<{
     open: boolean;
@@ -243,7 +246,7 @@ export const ReturnDetailPage = () => {
       {actions.includes('record-items') && (
         <Card title="Record returned items" style={{ marginTop: 16 }}>
           {draftItems.map((item, idx) => (
-            <Space key={idx} style={{ display: 'flex', marginBottom: 8 }} align="start" wrap>
+            <Space key={item._key} style={{ display: 'flex', marginBottom: 8 }} align="start" wrap>
               <Select
                 value={item.itemType}
                 style={{ width: 140 }}
@@ -293,7 +296,7 @@ export const ReturnDetailPage = () => {
           <Space style={{ marginTop: 8 }}>
             <Button
               onClick={() =>
-                setDraftItems((d) => [...d, { itemType: 'Other', status: 'Returned' }])
+                setDraftItems((d) => [...d, { _key: _nextDraftKey++, itemType: 'Other', status: 'Returned' }])
               }
             >
               Add item

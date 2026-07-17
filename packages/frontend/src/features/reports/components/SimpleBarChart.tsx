@@ -29,6 +29,8 @@ export const SimpleBarChart = ({
         </Typography.Text>
       )}
       <div
+        role="img"
+        aria-label={title ? `Bar chart: ${title}` : `Bar chart with ${data.length} items`}
         style={{
           display: 'flex',
           alignItems: 'flex-end',
@@ -37,11 +39,11 @@ export const SimpleBarChart = ({
           padding: '0 4px',
         }}
       >
-        {data.map((d, i) => {
+        {data.map((d) => {
           const barHeight = Math.max((d.value / maxVal) * (height - 30), 2);
           return (
             <div
-              key={i}
+              key={d.label}
               style={{
                 flex: 1,
                 display: 'flex',
@@ -137,8 +139,14 @@ export const SimplePieChart = ({ data, title, size = 160 }: PieProps) => {
         </Typography.Text>
       )}
       <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
-        <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-          {slices.map((s, i) => {
+        <svg
+          width={size}
+          height={size}
+          viewBox={`0 0 ${size} ${size}`}
+          role="img"
+          aria-label={title ? `Pie chart: ${title}` : `Pie chart with ${data.length} segments`}
+        >
+          {slices.map((s) => {
             const startRad = ((s.startAngle - 90) * Math.PI) / 180;
             const endRad = ((s.endAngle - 90) * Math.PI) / 180;
             const largeArc = s.endAngle - s.startAngle > 180 ? 1 : 0;
@@ -147,11 +155,11 @@ export const SimplePieChart = ({ data, title, size = 160 }: PieProps) => {
             const x2 = cx + r * Math.cos(endRad);
             const y2 = cy + r * Math.sin(endRad);
             if (s.percent >= 0.999) {
-              return <circle key={i} cx={cx} cy={cy} r={r} fill={s.color} />;
+              return <circle key={s.label} cx={cx} cy={cy} r={r} fill={s.color} />;
             }
             return (
               <path
-                key={i}
+                key={s.label}
                 d={`M ${cx} ${cy} L ${x1} ${y1} A ${r} ${r} 0 ${largeArc} 1 ${x2} ${y2} Z`}
                 fill={s.color}
               />
@@ -159,8 +167,8 @@ export const SimplePieChart = ({ data, title, size = 160 }: PieProps) => {
           })}
         </svg>
         <div style={{ fontSize: 12 }}>
-          {coloredData.map((d, i) => (
-            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
+          {coloredData.map((d) => (
+            <div key={d.label} style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
               <div style={{ width: 10, height: 10, borderRadius: 2, background: d.color, flexShrink: 0 }} />
               <span>{d.label}: {d.value}</span>
             </div>
