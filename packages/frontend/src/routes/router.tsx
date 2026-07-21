@@ -27,6 +27,10 @@ import { ActivityFeedPage } from '@/features/notifications/pages/ActivityFeedPag
 import { DashboardPage } from '@/features/reports/pages/DashboardPage';
 import { ReportPage } from '@/features/reports/pages/ReportPage';
 import { EnterpriseDashboardPage } from '@/features/dashboard/pages/EnterpriseDashboardPage';
+import { EmployeeListPage } from '@/features/employees/pages/EmployeeListPage';
+import { EmployeeDetailPage } from '@/features/employees/pages/EmployeeDetailPage';
+import { EmployeeCreatePage } from '@/features/employees/pages/EmployeeCreatePage';
+import { EmployeeEditPage } from '@/features/employees/pages/EmployeeEditPage';
 import { RoleName } from '@/types/role';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 import { PermissionDeniedPage } from '@/pages/PermissionDeniedPage';
@@ -69,6 +73,10 @@ export const router = createBrowserRouter([
     ),
     children: [
       { path: 'dashboard/analytics', element: <DashboardPage /> },
+      { path: 'employees', element: <EmployeeListPage /> },
+      { path: 'employees/new', element: <EmployeeCreatePage /> },
+      { path: 'employees/:id', element: <EmployeeDetailPage /> },
+      { path: 'employees/:id/edit', element: <EmployeeEditPage /> },
       { path: 'assets', element: <AssetListPage /> },
       { path: 'assets/new', element: <AssetCreatePage /> },
       { path: 'assets/import', element: <AssetImportPage /> },

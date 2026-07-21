@@ -55,6 +55,14 @@ export const queryKeys = {
       ['reports', type, params] as const,
     dashboard: ['reports', 'dashboard'] as const,
   },
+  employees: {
+    all: ['employees'] as const,
+    list: (params: Record<string, unknown>) => ['employees', 'list', params] as const,
+    byId: (id: string) => ['employees', 'detail', id] as const,
+    assets: (id: string) => ['employees', 'assets', id] as const,
+    history: (id: string) => ['employees', 'history', id] as const,
+    me: ['employees', 'me'] as const,
+  },
   enterpriseDashboard: {
     all: ['enterprise-dashboard'] as const,
     data: (params?: Record<string, unknown>) =>

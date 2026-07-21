@@ -25,6 +25,7 @@ import { DisposalModule } from './modules/disposal/disposal.module';
 import { NotificationModule } from './modules/notification/notification.module';
 import { ReportingModule } from './modules/reporting/reporting.module';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
+import { EmployeeModule } from './modules/employee/employee.module';
 
 @Module({
   imports: [
@@ -63,6 +64,7 @@ import { DashboardModule } from './modules/dashboard/dashboard.module';
     NotificationModule,
     ReportingModule,
     DashboardModule,
+    EmployeeModule,
   ],
   providers: [
     { provide: APP_GUARD, useClass: ThrottlerGuard },

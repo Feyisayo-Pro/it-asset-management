@@ -14,6 +14,7 @@ import {
   UserOutlined,
   LogoutOutlined,
   TeamOutlined,
+  IdcardOutlined,
   LaptopOutlined,
   RollbackOutlined,
   FileDoneOutlined,
@@ -48,6 +49,16 @@ export const AppLayout = () => {
       label: 'Dashboard',
       onClick: () => nav('/dashboard'),
     },
+    ...(roleName !== 'EMPLOYEE'
+      ? [
+          {
+            key: '/employees',
+            icon: <IdcardOutlined />,
+            label: 'Employees',
+            onClick: () => nav('/employees'),
+          },
+        ]
+      : []),
     {
       key: '/assets',
       icon: <LaptopOutlined />,
