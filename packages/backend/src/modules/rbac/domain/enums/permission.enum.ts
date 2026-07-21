@@ -55,6 +55,9 @@ export const Permission = {
 
   // Dashboard
   DashboardRead: 'dashboard:read',
+
+  // Master Data
+  MasterDataManage: 'master-data:manage',
 } as const;
 
 export type Permission = (typeof Permission)[keyof typeof Permission];

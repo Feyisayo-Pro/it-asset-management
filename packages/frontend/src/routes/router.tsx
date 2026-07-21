@@ -31,6 +31,7 @@ import { EmployeeListPage } from '@/features/employees/pages/EmployeeListPage';
 import { EmployeeDetailPage } from '@/features/employees/pages/EmployeeDetailPage';
 import { EmployeeCreatePage } from '@/features/employees/pages/EmployeeCreatePage';
 import { EmployeeEditPage } from '@/features/employees/pages/EmployeeEditPage';
+import { MasterDataPage } from '@/features/admin/master-data/pages/MasterDataPage';
 import { RoleName } from '@/types/role';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 import { PermissionDeniedPage } from '@/pages/PermissionDeniedPage';
@@ -55,6 +56,7 @@ export const router = createBrowserRouter([
       { path: 'admin/users', element: <UserManagementPage /> },
       { path: 'admin/users/new', element: <UserCreatePage /> },
       { path: 'admin/users/:id/edit', element: <UserEditPage /> },
+      { path: 'admin/master-data', element: <MasterDataPage /> },
     ],
   },
   {

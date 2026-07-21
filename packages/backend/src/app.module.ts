@@ -26,6 +26,7 @@ import { NotificationModule } from './modules/notification/notification.module';
 import { ReportingModule } from './modules/reporting/reporting.module';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { EmployeeModule } from './modules/employee/employee.module';
+import { MasterDataModule } from './modules/master-data/master-data.module';
 
 @Module({
   imports: [
@@ -65,6 +66,7 @@ import { EmployeeModule } from './modules/employee/employee.module';
     ReportingModule,
     DashboardModule,
     EmployeeModule,
+    MasterDataModule,
   ],
   providers: [
     { provide: APP_GUARD, useClass: ThrottlerGuard },

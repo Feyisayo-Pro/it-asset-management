@@ -63,6 +63,10 @@ export const queryKeys = {
     history: (id: string) => ['employees', 'history', id] as const,
     me: ['employees', 'me'] as const,
   },
+  masterData: {
+    all: ['master-data'] as const,
+    byCategory: (category: string) => ['master-data', category] as const,
+  },
   enterpriseDashboard: {
     all: ['enterprise-dashboard'] as const,
     data: (params?: Record<string, unknown>) =>

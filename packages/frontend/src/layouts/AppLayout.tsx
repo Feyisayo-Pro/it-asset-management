@@ -25,6 +25,7 @@ import {
   BarChartOutlined,
   UnorderedListOutlined,
   DashboardOutlined,
+  DatabaseOutlined,
 } from '@ant-design/icons';
 import { useAuth } from '@/hooks/useAuth';
 import { ROLE_COLOR, ROLE_LABEL, RoleName } from '@/types/role';
@@ -112,6 +113,12 @@ export const AppLayout = () => {
             icon: <TeamOutlined />,
             label: 'Users',
             onClick: () => nav('/admin/users'),
+          },
+          {
+            key: '/admin/master-data',
+            icon: <DatabaseOutlined />,
+            label: 'Master Data',
+            onClick: () => nav('/admin/master-data'),
           },
         ]
       : []),
