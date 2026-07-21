@@ -78,6 +78,11 @@ export const queryKeys = {
     list: (params: Record<string, unknown>) => ['allocations', 'list', params] as const,
     byId: (id: string) => ['allocations', 'detail', id] as const,
   },
+  compliance: {
+    all: ['compliance'] as const,
+    dashboard: ['compliance', 'dashboard'] as const,
+    breaches: (params: Record<string, unknown>) => ['compliance', 'breaches', params] as const,
+  },
   masterData: {
     all: ['master-data'] as const,
     byCategory: (category: string) => ['master-data', category] as const,

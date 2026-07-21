@@ -41,6 +41,7 @@ import { AcquisitionCreatePage } from '@/features/acquisitions/pages/Acquisition
 import { AllocationListPage } from '@/features/allocations/pages/AllocationListPage';
 import { AllocationDetailPage } from '@/features/allocations/pages/AllocationDetailPage';
 import { AllocationCreatePage } from '@/features/allocations/pages/AllocationCreatePage';
+import { CompliancePage } from '@/features/compliance/pages/CompliancePage';
 import { RoleName } from '@/types/role';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 import { PermissionDeniedPage } from '@/pages/PermissionDeniedPage';
@@ -111,6 +112,7 @@ export const router = createBrowserRouter([
       { path: 'acquisitions/:id', element: <AcquisitionDetailPage /> },
       { path: 'acquisitions/:id/edit', element: <AcquisitionCreatePage /> },
       { path: 'allocations/new', element: <AllocationCreatePage /> },
+      { path: 'compliance', element: <CompliancePage /> },
       { path: 'reports', element: <ReportPage /> },
     ],
   },

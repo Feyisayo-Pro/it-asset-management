@@ -30,6 +30,7 @@ import { MasterDataModule } from './modules/master-data/master-data.module';
 import { VendorModule } from './modules/vendor/vendor.module';
 import { AcquisitionModule } from './modules/acquisition/acquisition.module';
 import { AllocationModule } from './modules/allocation/allocation.module';
+import { ComplianceModule } from './modules/compliance/compliance.module';
 
 @Module({
   imports: [
@@ -73,6 +74,7 @@ import { AllocationModule } from './modules/allocation/allocation.module';
     VendorModule,
     AcquisitionModule,
     AllocationModule,
+    ComplianceModule,
   ],
   providers: [
     { provide: APP_GUARD, useClass: ThrottlerGuard },

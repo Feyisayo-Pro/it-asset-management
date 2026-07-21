@@ -70,6 +70,10 @@ export const Permission = {
   // Allocation
   AllocationRead: 'allocation:read',
   AllocationManage: 'allocation:manage',
+
+  // Compliance
+  ComplianceRead: 'compliance:read',
+  ComplianceManage: 'compliance:manage',
 } as const;
 
 export type Permission = (typeof Permission)[keyof typeof Permission];
