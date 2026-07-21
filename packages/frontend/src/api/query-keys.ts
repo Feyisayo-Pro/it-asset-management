@@ -83,6 +83,11 @@ export const queryKeys = {
     dashboard: ['compliance', 'dashboard'] as const,
     breaches: (params: Record<string, unknown>) => ['compliance', 'breaches', params] as const,
   },
+  auditLogs: {
+    all: ['audit-logs'] as const,
+    list: (params: Record<string, unknown>) => ['audit-logs', 'list', params] as const,
+    byId: (id: string) => ['audit-logs', 'detail', id] as const,
+  },
   masterData: {
     all: ['master-data'] as const,
     byCategory: (category: string) => ['master-data', category] as const,

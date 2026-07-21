@@ -32,6 +32,8 @@ import { EmployeeDetailPage } from '@/features/employees/pages/EmployeeDetailPag
 import { EmployeeCreatePage } from '@/features/employees/pages/EmployeeCreatePage';
 import { EmployeeEditPage } from '@/features/employees/pages/EmployeeEditPage';
 import { MasterDataPage } from '@/features/admin/master-data/pages/MasterDataPage';
+import { AuditLogPage } from '@/features/admin/audit-logs/pages/AuditLogPage';
+import { WorkflowConfigPage } from '@/features/admin/workflow-config/pages/WorkflowConfigPage';
 import { VendorListPage } from '@/features/vendors/pages/VendorListPage';
 import { VendorDetailPage } from '@/features/vendors/pages/VendorDetailPage';
 import { VendorCreatePage } from '@/features/vendors/pages/VendorCreatePage';
@@ -42,6 +44,8 @@ import { AllocationListPage } from '@/features/allocations/pages/AllocationListP
 import { AllocationDetailPage } from '@/features/allocations/pages/AllocationDetailPage';
 import { AllocationCreatePage } from '@/features/allocations/pages/AllocationCreatePage';
 import { CompliancePage } from '@/features/compliance/pages/CompliancePage';
+import { ProfilePage } from '@/features/profile/pages/ProfilePage';
+import { NotificationPreferencesPage } from '@/features/profile/pages/NotificationPreferencesPage';
 import { RoleName } from '@/types/role';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 import { PermissionDeniedPage } from '@/pages/PermissionDeniedPage';
@@ -67,6 +71,8 @@ export const router = createBrowserRouter([
       { path: 'admin/users/new', element: <UserCreatePage /> },
       { path: 'admin/users/:id/edit', element: <UserEditPage /> },
       { path: 'admin/master-data', element: <MasterDataPage /> },
+      { path: 'admin/audit-logs', element: <AuditLogPage /> },
+      { path: 'admin/workflow-config', element: <WorkflowConfigPage /> },
     ],
   },
   {
@@ -131,6 +137,8 @@ export const router = createBrowserRouter([
       { path: 'allocations', element: <AllocationListPage /> },
       { path: 'allocations/:id', element: <AllocationDetailPage /> },
       { path: 'activity', element: <ActivityFeedPage /> },
+      { path: 'profile', element: <ProfilePage /> },
+      { path: 'notification-preferences', element: <NotificationPreferencesPage /> },
     ],
   },
   { path: '/403', element: <PermissionDeniedPage /> },

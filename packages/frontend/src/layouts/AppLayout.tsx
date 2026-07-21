@@ -30,6 +30,9 @@ import {
   FileAddOutlined,
   SwapOutlined,
   SafetyCertificateOutlined,
+  AuditOutlined,
+  PartitionOutlined,
+  SettingOutlined,
 } from '@ant-design/icons';
 import { useAuth } from '@/hooks/useAuth';
 import { ROLE_COLOR, ROLE_LABEL, RoleName } from '@/types/role';
@@ -148,6 +151,18 @@ export const AppLayout = () => {
             label: 'Master Data',
             onClick: () => nav('/admin/master-data'),
           },
+          {
+            key: '/admin/audit-logs',
+            icon: <AuditOutlined />,
+            label: 'Audit Logs',
+            onClick: () => nav('/admin/audit-logs'),
+          },
+          {
+            key: '/admin/workflow-config',
+            icon: <PartitionOutlined />,
+            label: 'Workflows',
+            onClick: () => nav('/admin/workflow-config'),
+          },
         ]
       : []),
   ];
@@ -165,6 +180,19 @@ export const AppLayout = () => {
             </Tag>
           </div>
         ),
+      },
+      { type: 'divider' as const },
+      {
+        key: 'profile',
+        icon: <UserOutlined />,
+        label: 'My Profile',
+        onClick: () => nav('/profile'),
+      },
+      {
+        key: 'notification-preferences',
+        icon: <SettingOutlined />,
+        label: 'Notification Preferences',
+        onClick: () => nav('/notification-preferences'),
       },
       { type: 'divider' as const },
       {
