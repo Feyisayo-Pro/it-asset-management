@@ -62,6 +62,10 @@ export const Permission = {
   // Vendor
   VendorRead: 'vendor:read',
   VendorManage: 'vendor:manage',
+
+  // Acquisition
+  AcquisitionRead: 'acquisition:read',
+  AcquisitionManage: 'acquisition:manage',
 } as const;
 
 export type Permission = (typeof Permission)[keyof typeof Permission];

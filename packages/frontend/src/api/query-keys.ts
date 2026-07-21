@@ -68,6 +68,11 @@ export const queryKeys = {
     list: (params: Record<string, unknown>) => ['vendors', 'list', params] as const,
     byId: (id: string) => ['vendors', 'detail', id] as const,
   },
+  acquisitions: {
+    all: ['acquisitions'] as const,
+    list: (params: Record<string, unknown>) => ['acquisitions', 'list', params] as const,
+    byId: (id: string) => ['acquisitions', 'detail', id] as const,
+  },
   masterData: {
     all: ['master-data'] as const,
     byCategory: (category: string) => ['master-data', category] as const,

@@ -35,6 +35,9 @@ import { MasterDataPage } from '@/features/admin/master-data/pages/MasterDataPag
 import { VendorListPage } from '@/features/vendors/pages/VendorListPage';
 import { VendorDetailPage } from '@/features/vendors/pages/VendorDetailPage';
 import { VendorCreatePage } from '@/features/vendors/pages/VendorCreatePage';
+import { AcquisitionListPage } from '@/features/acquisitions/pages/AcquisitionListPage';
+import { AcquisitionDetailPage } from '@/features/acquisitions/pages/AcquisitionDetailPage';
+import { AcquisitionCreatePage } from '@/features/acquisitions/pages/AcquisitionCreatePage';
 import { RoleName } from '@/types/role';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 import { PermissionDeniedPage } from '@/pages/PermissionDeniedPage';
@@ -100,6 +103,10 @@ export const router = createBrowserRouter([
       { path: 'vendors/new', element: <VendorCreatePage /> },
       { path: 'vendors/:id', element: <VendorDetailPage /> },
       { path: 'vendors/:id/edit', element: <VendorCreatePage /> },
+      { path: 'acquisitions', element: <AcquisitionListPage /> },
+      { path: 'acquisitions/new', element: <AcquisitionCreatePage /> },
+      { path: 'acquisitions/:id', element: <AcquisitionDetailPage /> },
+      { path: 'acquisitions/:id/edit', element: <AcquisitionCreatePage /> },
       { path: 'reports', element: <ReportPage /> },
     ],
   },

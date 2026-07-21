@@ -27,6 +27,7 @@ import {
   DashboardOutlined,
   DatabaseOutlined,
   ShopOutlined,
+  FileAddOutlined,
 } from '@ant-design/icons';
 import { useAuth } from '@/hooks/useAuth';
 import { ROLE_COLOR, ROLE_LABEL, RoleName } from '@/types/role';
@@ -98,6 +99,12 @@ export const AppLayout = () => {
             icon: <ShopOutlined />,
             label: 'Vendors',
             onClick: () => nav('/vendors'),
+          },
+          {
+            key: '/acquisitions',
+            icon: <FileAddOutlined />,
+            label: 'Acquisitions',
+            onClick: () => nav('/acquisitions'),
           },
           {
             key: '/reports',
