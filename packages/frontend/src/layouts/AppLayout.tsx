@@ -38,6 +38,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { ROLE_COLOR, ROLE_LABEL, RoleName } from '@/types/role';
 import { NotificationBell } from '@/features/notifications/components/NotificationBell';
 import { NotificationDrawer } from '@/features/notifications/components/NotificationDrawer';
+import { GlobalSearch } from '@/components/GlobalSearch';
 
 const { Header, Sider, Content } = Layout;
 
@@ -271,6 +272,7 @@ export const AppLayout = () => {
         </Content>
       </Layout>
       <NotificationDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+      <GlobalSearch />
     </Layout>
   );
 };
