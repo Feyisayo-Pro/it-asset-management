@@ -58,6 +58,10 @@ export const Permission = {
 
   // Master Data
   MasterDataManage: 'master-data:manage',
+
+  // Vendor
+  VendorRead: 'vendor:read',
+  VendorManage: 'vendor:manage',
 } as const;
 
 export type Permission = (typeof Permission)[keyof typeof Permission];

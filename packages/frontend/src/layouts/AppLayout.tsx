@@ -26,6 +26,7 @@ import {
   UnorderedListOutlined,
   DashboardOutlined,
   DatabaseOutlined,
+  ShopOutlined,
 } from '@ant-design/icons';
 import { useAuth } from '@/hooks/useAuth';
 import { ROLE_COLOR, ROLE_LABEL, RoleName } from '@/types/role';
@@ -91,6 +92,12 @@ export const AppLayout = () => {
             icon: <DeleteOutlined />,
             label: 'Disposals',
             onClick: () => nav('/disposals'),
+          },
+          {
+            key: '/vendors',
+            icon: <ShopOutlined />,
+            label: 'Vendors',
+            onClick: () => nav('/vendors'),
           },
           {
             key: '/reports',

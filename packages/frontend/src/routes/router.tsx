@@ -32,6 +32,9 @@ import { EmployeeDetailPage } from '@/features/employees/pages/EmployeeDetailPag
 import { EmployeeCreatePage } from '@/features/employees/pages/EmployeeCreatePage';
 import { EmployeeEditPage } from '@/features/employees/pages/EmployeeEditPage';
 import { MasterDataPage } from '@/features/admin/master-data/pages/MasterDataPage';
+import { VendorListPage } from '@/features/vendors/pages/VendorListPage';
+import { VendorDetailPage } from '@/features/vendors/pages/VendorDetailPage';
+import { VendorCreatePage } from '@/features/vendors/pages/VendorCreatePage';
 import { RoleName } from '@/types/role';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 import { PermissionDeniedPage } from '@/pages/PermissionDeniedPage';
@@ -93,6 +96,10 @@ export const router = createBrowserRouter([
       { path: 'disposals', element: <DisposalListPage /> },
       { path: 'disposals/new', element: <RequestDisposalPage /> },
       { path: 'disposals/:id', element: <DisposalDetailPage /> },
+      { path: 'vendors', element: <VendorListPage /> },
+      { path: 'vendors/new', element: <VendorCreatePage /> },
+      { path: 'vendors/:id', element: <VendorDetailPage /> },
+      { path: 'vendors/:id/edit', element: <VendorCreatePage /> },
       { path: 'reports', element: <ReportPage /> },
     ],
   },

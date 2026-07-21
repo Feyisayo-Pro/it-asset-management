@@ -27,6 +27,7 @@ import { ReportingModule } from './modules/reporting/reporting.module';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { EmployeeModule } from './modules/employee/employee.module';
 import { MasterDataModule } from './modules/master-data/master-data.module';
+import { VendorModule } from './modules/vendor/vendor.module';
 
 @Module({
   imports: [
@@ -67,6 +68,7 @@ import { MasterDataModule } from './modules/master-data/master-data.module';
     DashboardModule,
     EmployeeModule,
     MasterDataModule,
+    VendorModule,
   ],
   providers: [
     { provide: APP_GUARD, useClass: ThrottlerGuard },
