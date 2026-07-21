@@ -38,6 +38,9 @@ import { VendorCreatePage } from '@/features/vendors/pages/VendorCreatePage';
 import { AcquisitionListPage } from '@/features/acquisitions/pages/AcquisitionListPage';
 import { AcquisitionDetailPage } from '@/features/acquisitions/pages/AcquisitionDetailPage';
 import { AcquisitionCreatePage } from '@/features/acquisitions/pages/AcquisitionCreatePage';
+import { AllocationListPage } from '@/features/allocations/pages/AllocationListPage';
+import { AllocationDetailPage } from '@/features/allocations/pages/AllocationDetailPage';
+import { AllocationCreatePage } from '@/features/allocations/pages/AllocationCreatePage';
 import { RoleName } from '@/types/role';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 import { PermissionDeniedPage } from '@/pages/PermissionDeniedPage';
@@ -107,6 +110,7 @@ export const router = createBrowserRouter([
       { path: 'acquisitions/new', element: <AcquisitionCreatePage /> },
       { path: 'acquisitions/:id', element: <AcquisitionDetailPage /> },
       { path: 'acquisitions/:id/edit', element: <AcquisitionCreatePage /> },
+      { path: 'allocations/new', element: <AllocationCreatePage /> },
       { path: 'reports', element: <ReportPage /> },
     ],
   },
@@ -122,6 +126,8 @@ export const router = createBrowserRouter([
       { path: 'returns', element: <ReturnListPage /> },
       { path: 'returns/new', element: <InitiateReturnPage /> },
       { path: 'returns/:id', element: <ReturnDetailPage /> },
+      { path: 'allocations', element: <AllocationListPage /> },
+      { path: 'allocations/:id', element: <AllocationDetailPage /> },
       { path: 'activity', element: <ActivityFeedPage /> },
     ],
   },

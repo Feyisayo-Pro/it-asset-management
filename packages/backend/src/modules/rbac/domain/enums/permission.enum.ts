@@ -66,6 +66,10 @@ export const Permission = {
   // Acquisition
   AcquisitionRead: 'acquisition:read',
   AcquisitionManage: 'acquisition:manage',
+
+  // Allocation
+  AllocationRead: 'allocation:read',
+  AllocationManage: 'allocation:manage',
 } as const;
 
 export type Permission = (typeof Permission)[keyof typeof Permission];

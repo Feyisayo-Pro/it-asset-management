@@ -29,6 +29,7 @@ import { EmployeeModule } from './modules/employee/employee.module';
 import { MasterDataModule } from './modules/master-data/master-data.module';
 import { VendorModule } from './modules/vendor/vendor.module';
 import { AcquisitionModule } from './modules/acquisition/acquisition.module';
+import { AllocationModule } from './modules/allocation/allocation.module';
 
 @Module({
   imports: [
@@ -71,6 +72,7 @@ import { AcquisitionModule } from './modules/acquisition/acquisition.module';
     MasterDataModule,
     VendorModule,
     AcquisitionModule,
+    AllocationModule,
   ],
   providers: [
     { provide: APP_GUARD, useClass: ThrottlerGuard },

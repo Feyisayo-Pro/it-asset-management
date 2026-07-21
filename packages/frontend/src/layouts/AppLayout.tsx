@@ -28,6 +28,7 @@ import {
   DatabaseOutlined,
   ShopOutlined,
   FileAddOutlined,
+  SwapOutlined,
 } from '@ant-design/icons';
 import { useAuth } from '@/hooks/useAuth';
 import { ROLE_COLOR, ROLE_LABEL, RoleName } from '@/types/role';
@@ -73,6 +74,12 @@ export const AppLayout = () => {
       icon: <RollbackOutlined />,
       label: 'Returns',
       onClick: () => nav('/returns'),
+    },
+    {
+      key: '/allocations',
+      icon: <SwapOutlined />,
+      label: 'Allocations',
+      onClick: () => nav('/allocations'),
     },
     ...(roleName !== 'EMPLOYEE'
       ? [
