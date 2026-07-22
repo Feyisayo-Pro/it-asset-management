@@ -84,10 +84,10 @@ export class AddAllocationModule1721500000000 implements MigrationInterface {
     }
 
     await runner.query(`
-      INSERT INTO permissions (id, name, description, created_at, updated_at)
+      INSERT INTO "permissions" ("id", "key", "description")
       VALUES
-        ('22222222-0000-0000-0000-000000000027', 'allocation:read',   'View allocations',          now(), now()),
-        ('22222222-0000-0000-0000-000000000028', 'allocation:manage', 'Create and manage allocations', now(), now())
+        ('22222222-0000-0000-0000-000000000027', 'allocation:read',   'View allocations'),
+        ('22222222-0000-0000-0000-000000000028', 'allocation:manage', 'Create and manage allocations')
       ON CONFLICT (id) DO NOTHING
     `);
 

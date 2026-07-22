@@ -19,6 +19,12 @@ export interface EmployeeDto {
   updatedAt: string;
 }
 
+const toDateStr = (v: Date | string): string =>
+  v instanceof Date ? v.toISOString().slice(0, 10) : String(v).slice(0, 10);
+
+const toIso = (v: Date | string): string =>
+  v instanceof Date ? v.toISOString() : new Date(v).toISOString();
+
 export const toEmployeeDto = (e: Employee): EmployeeDto => ({
   id: e.id,
   employeeCode: e.employeeCode,
@@ -30,12 +36,10 @@ export const toEmployeeDto = (e: Employee): EmployeeDto => ({
   designation: e.designation,
   managerId: e.managerId,
   officeLocation: e.officeLocation,
-  hireDate: e.hireDate.toISOString().slice(0, 10),
+  hireDate: toDateStr(e.hireDate),
   employmentStatus: e.employmentStatus,
-  terminationDate: e.terminationDate
-    ? e.terminationDate.toISOString().slice(0, 10)
-    : null,
+  terminationDate: e.terminationDate ? toDateStr(e.terminationDate) : null,
   userId: e.userId,
-  createdAt: e.createdAt.toISOString(),
-  updatedAt: e.updatedAt.toISOString(),
+  createdAt: toIso(e.createdAt),
+  updatedAt: toIso(e.updatedAt),
 });

@@ -26,6 +26,9 @@ export class VendorNotFoundError extends ApplicationError {
   }
 }
 
+const toIso = (v: Date | string): string =>
+  v instanceof Date ? v.toISOString() : new Date(v).toISOString();
+
 function toDto(v: VendorOrmEntity): VendorDto {
   return {
     id: v.id,
@@ -38,8 +41,8 @@ function toDto(v: VendorOrmEntity): VendorDto {
     website: v.website,
     notes: v.notes,
     isActive: v.isActive,
-    createdAt: v.createdAt.toISOString(),
-    updatedAt: v.updatedAt.toISOString(),
+    createdAt: toIso(v.createdAt),
+    updatedAt: toIso(v.updatedAt),
   };
 }
 

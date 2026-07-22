@@ -24,10 +24,10 @@ export class AddComplianceModule1721600000000 implements MigrationInterface {
     await runner.query(`CREATE INDEX idx_compliance_breaches_unresolved ON compliance_breaches(resolved_at) WHERE resolved_at IS NULL`);
 
     await runner.query(`
-      INSERT INTO permissions (id, name, description, created_at, updated_at)
+      INSERT INTO "permissions" ("id", "key", "description")
       VALUES
-        ('22222222-0000-0000-0000-000000000029', 'compliance:read',   'View compliance breaches', now(), now()),
-        ('22222222-0000-0000-0000-000000000030', 'compliance:manage', 'Manage compliance settings', now(), now())
+        ('22222222-0000-0000-0000-000000000029', 'compliance:read',   'View compliance breaches'),
+        ('22222222-0000-0000-0000-000000000030', 'compliance:manage', 'Manage compliance settings')
       ON CONFLICT (id) DO NOTHING
     `);
 

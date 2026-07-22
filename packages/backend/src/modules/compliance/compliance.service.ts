@@ -187,7 +187,7 @@ export class ComplianceService {
       qb.andWhere('b.resolved_at IS NULL');
     }
 
-    qb.orderBy('b.breached_at', 'DESC');
+    qb.orderBy('b.breachedAt', 'DESC');
 
     const page = Math.max(1, params.page);
     const pageSize = Math.min(500, Math.max(1, params.pageSize));

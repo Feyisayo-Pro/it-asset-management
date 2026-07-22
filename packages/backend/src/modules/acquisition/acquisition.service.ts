@@ -29,13 +29,19 @@ export interface AcquisitionDto {
   updatedAt: string;
 }
 
+const toDateStr = (v: Date | string): string =>
+  v instanceof Date ? v.toISOString().slice(0, 10) : String(v).slice(0, 10);
+
+const toIso = (v: Date | string): string =>
+  v instanceof Date ? v.toISOString() : new Date(v).toISOString();
+
 function toDto(e: AcquisitionOrmEntity): AcquisitionDto {
   return {
     id: e.id,
     vendorId: e.vendorId,
     vendorName: e.vendor?.name ?? null,
     invoiceNumber: e.invoiceNumber,
-    purchaseDate: e.purchaseDate ? e.purchaseDate.toISOString().slice(0, 10) : null,
+    purchaseDate: e.purchaseDate ? toDateStr(e.purchaseDate) : null,
     warrantyMonths: e.warrantyMonths,
     unitCostCents: e.unitCostCents ? Number(e.unitCostCents) : null,
     currency: e.currency,
@@ -43,8 +49,8 @@ function toDto(e: AcquisitionOrmEntity): AcquisitionDto {
     notes: e.notes,
     createdBy: e.createdBy,
     assetIds: e.assets?.map((a) => a.id) ?? [],
-    createdAt: e.createdAt.toISOString(),
-    updatedAt: e.updatedAt.toISOString(),
+    createdAt: toIso(e.createdAt),
+    updatedAt: toIso(e.updatedAt),
   };
 }
 
@@ -67,8 +73,7 @@ export class AcquisitionService {
   async list(params: ListAcquisitionsParams) {
     const qb = this.repo
       .createQueryBuilder('a')
-      .leftJoinAndSelect('a.vendor', 'v')
-      .leftJoinAndSelect('a.assets', 'assets');
+      .leftJoinAndSelect('a.vendor', 'v');
 
     if (params.search) {
       const like = `%${params.search.trim().toLowerCase()}%`;
@@ -85,13 +90,24 @@ export class AcquisitionService {
       qb.andWhere('a.vendor_id = :vendorId', { vendorId: params.vendorId });
     }
 
-    qb.orderBy('a.created_at', 'DESC');
+    qb.orderBy('a.createdAt', 'DESC');
 
     const page = Math.max(1, params.page);
     const pageSize = Math.min(500, Math.max(1, params.pageSize));
     qb.skip((page - 1) * pageSize).take(pageSize);
 
     const [rows, total] = await qb.getManyAndCount();
+
+    const ids = rows.map((r) => r.id);
+    if (ids.length) {
+      const withAssets = await this.repo.find({
+        where: { id: In(ids) },
+        relations: ['assets'],
+      });
+      const assetMap = new Map(withAssets.map((w) => [w.id, w.assets ?? []]));
+      for (const r of rows) r.assets = assetMap.get(r.id) ?? [];
+    }
+
     return { data: rows.map(toDto), page, pageSize, total };
   }
 

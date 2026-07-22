@@ -1,9 +1,10 @@
 import { DisposalRecord } from '../../domain/entities/disposal-record.entity';
 
-const toDateOnly = (d: Date | null): string | null => {
-  if (!d) return null;
-  return d.toISOString().slice(0, 10);
-};
+const toDateStr = (v: Date | string): string =>
+  v instanceof Date ? v.toISOString().slice(0, 10) : String(v).slice(0, 10);
+
+const toIso = (v: Date | string): string =>
+  v instanceof Date ? v.toISOString() : new Date(v).toISOString();
 
 export const toDisposalDto = (r: DisposalRecord) => ({
   id: r.id,
@@ -21,9 +22,9 @@ export const toDisposalDto = (r: DisposalRecord) => ({
   signatureIp: r.signatureIp,
   evidenceUrls: r.evidenceUrls,
   photoUrls: r.photoUrls,
-  disposalDate: toDateOnly(r.disposalDate),
-  requestedAt: r.requestedAt.toISOString(),
-  approvedAt: r.approvedAt?.toISOString() ?? null,
-  createdAt: r.createdAt.toISOString(),
-  updatedAt: r.updatedAt.toISOString(),
+  disposalDate: r.disposalDate ? toDateStr(r.disposalDate) : null,
+  requestedAt: toIso(r.requestedAt),
+  approvedAt: r.approvedAt ? toIso(r.approvedAt) : null,
+  createdAt: toIso(r.createdAt),
+  updatedAt: toIso(r.updatedAt),
 });

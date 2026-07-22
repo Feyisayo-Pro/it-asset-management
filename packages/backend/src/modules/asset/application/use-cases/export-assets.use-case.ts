@@ -30,13 +30,13 @@ export class ExportAssetsUseCase {
           serial_number: a.serialNumber,
           imei: a.imei ?? '',
           status: a.status,
-          purchase_date: a.purchaseDate ? a.purchaseDate.toISOString().slice(0, 10) : '',
+          purchase_date: a.purchaseDate ? (a.purchaseDate instanceof Date ? a.purchaseDate.toISOString().slice(0, 10) : String(a.purchaseDate).slice(0, 10)) : '',
           purchase_amount:
             a.purchaseAmountCents != null ? (a.purchaseAmountCents / 100).toFixed(2) : '',
           purchase_currency: a.purchaseCurrency,
           vendor: a.vendor ?? '',
           warranty_expiry: a.warrantyExpiry
-            ? a.warrantyExpiry.toISOString().slice(0, 10)
+            ? (a.warrantyExpiry instanceof Date ? a.warrantyExpiry.toISOString().slice(0, 10) : String(a.warrantyExpiry).slice(0, 10))
             : '',
           office_location: a.officeLocation ?? '',
           department: a.department ?? '',

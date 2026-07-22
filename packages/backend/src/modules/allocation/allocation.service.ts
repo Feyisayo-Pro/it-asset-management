@@ -38,6 +38,9 @@ export interface AllocationDto {
   updatedAt: string;
 }
 
+const toIso = (v: Date | string): string =>
+  v instanceof Date ? v.toISOString() : new Date(v).toISOString();
+
 function toDto(e: AllocationOrmEntity): AllocationDto {
   return {
     id: e.id,
@@ -51,8 +54,8 @@ function toDto(e: AllocationOrmEntity): AllocationDto {
     currentState: e.currentState,
     justification: e.justification,
     requestedBy: e.requestedBy,
-    createdAt: e.createdAt.toISOString(),
-    updatedAt: e.updatedAt.toISOString(),
+    createdAt: toIso(e.createdAt),
+    updatedAt: toIso(e.updatedAt),
   };
 }
 
@@ -94,7 +97,7 @@ export class AllocationService {
       qb.andWhere('a.current_state = :status', { status: params.status });
     }
 
-    qb.orderBy('a.created_at', 'DESC');
+    qb.orderBy('a.createdAt', 'DESC');
 
     const page = Math.max(1, params.page);
     const pageSize = Math.min(500, Math.max(1, params.pageSize));
