@@ -1,0 +1,16 @@
+# Build context for both packages/backend/Dockerfile and
+# packages/frontend/Dockerfile is the repo root (npm workspaces need the
+# root package.json/lockfile alongside every workspace's package.json),
+# so this is the only .dockerignore Docker will actually read.
+**/node_modules
+**/dist
+**/coverage
+**/.git
+**/*.tsbuildinfo
+**/.env
+**/.env.local
+**/.env.*.local
+**/*.log
+.vscode
+.idea
+docs

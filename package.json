@@ -1,0 +1,25 @@
+{
+  "name": "it-asset-management",
+  "private": true,
+  "version": "0.0.0",
+  "description": "IT Asset Lifecycle Management & Workflow Platform",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "backend:build": "npm --workspace @iam/backend run build",
+    "backend:start": "npm --workspace @iam/backend run start",
+    "backend:start:dev": "npm --workspace @iam/backend run start:dev",
+    "backend:test": "npm --workspace @iam/backend run test",
+    "backend:test:unit": "npm --workspace @iam/backend run test:unit",
+    "backend:typecheck": "npm --workspace @iam/backend run typecheck",
+    "backend:migration:run": "npm --workspace @iam/backend run migration:run",
+    "frontend:build": "npm --workspace @iam/frontend run build",
+    "frontend:dev": "npm --workspace @iam/frontend run dev",
+    "frontend:test": "npm --workspace @iam/frontend run test",
+    "frontend:typecheck": "npm --workspace @iam/frontend run typecheck",
+    "build": "npm run backend:build && npm run frontend:build",
+    "typecheck": "npm run backend:typecheck && npm run frontend:typecheck",
+    "test": "npm run backend:test && npm run frontend:test"
+  }
+}
