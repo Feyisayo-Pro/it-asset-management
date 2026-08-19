@@ -617,6 +617,14 @@ export class EnterpriseDashboardService {
       params.push(filters.assetType);
       where.push(`a."device_type" = $${params.length}`);
     }
+    if (filters.dateFrom) {
+      params.push(filters.dateFrom);
+      where.push(`a."created_at" >= $${params.length}`);
+    }
+    if (filters.dateTo) {
+      params.push(filters.dateTo);
+      where.push(`a."created_at" <= ($${params.length}::date + interval '1 day')`);
+    }
 
     return { where, params };
   }

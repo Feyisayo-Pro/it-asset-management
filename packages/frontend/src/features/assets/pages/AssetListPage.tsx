@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type Key } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   Button,
@@ -10,7 +10,14 @@ import {
   Table,
   message,
 } from 'antd';
-import { PlusOutlined, UploadOutlined, DownloadOutlined, MoreOutlined } from '@ant-design/icons';
+import {
+  PlusOutlined,
+  UploadOutlined,
+  DownloadOutlined,
+  MoreOutlined,
+  PrinterOutlined,
+  DownOutlined,
+} from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
 import { PageHeader } from '@/components/PageHeader';
 import { AssetStatusBadge } from '../components/AssetStatusBadge';
@@ -45,6 +52,9 @@ export const AssetListPage = () => {
   const [department, setDepartment] = useState('');
   const [officeLocation, setOfficeLocation] = useState('');
   const [importOpen, setImportOpen] = useState(false);
+  const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
+  const [selectedAssets, setSelectedAssets] = useState<AssetDto[]>([]);
+  const [printingLabels, setPrintingLabels] = useState(false);
 
   const query = useAssets({
     page,
@@ -85,6 +95,97 @@ export const AssetListPage = () => {
       officeLocation: officeLocation || undefined,
     });
     window.open(url, '_blank');
+  };
+
+  const printBulkQrLabels = async () => {
+    if (selectedAssets.length === 0) return;
+    setPrintingLabels(true);
+    try {
+      const labels = await Promise.all(
+        selectedAssets.map(async (a) => ({
+          assetTag: a.assetTag,
+          deviceLabel: `${a.brand} ${a.model}`,
+          url: URL.createObjectURL(await assetsApi.qrBlob(a.id)),
+        })),
+      );
+
+      const win = window.open('', '_blank', 'width=900,height=700');
+      if (!win) {
+        messageApi.error('Pop-up blocked — allow pop-ups for this site to print QR labels.');
+        return;
+      }
+
+      // 3x8 sticker sheet (24 labels/page); pages after the first are
+      // forced onto new sheets of paper via page-break-after.
+      const PER_PAGE = 24;
+      const pages: typeof labels[] = [];
+      for (let i = 0; i < labels.length; i += PER_PAGE) {
+        pages.push(labels.slice(i, i + PER_PAGE));
+      }
+
+      const cellHtml = (l: (typeof labels)[number]) => `
+        <div class="cell">
+          <img src="${l.url}" alt="QR" onload="window.__qrLoaded && window.__qrLoaded()" />
+          <div class="tag">${l.assetTag}</div>
+          <div class="device">${l.deviceLabel}</div>
+        </div>`;
+
+      const pageHtml = (pageLabels: typeof labels) => `
+        <div class="sheet">${pageLabels.map(cellHtml).join('')}</div>`;
+
+      win.document.write(`<!doctype html>
+        <html>
+          <head>
+            <title>QR Labels — ${labels.length} asset(s)</title>
+            <style>
+              * { box-sizing: border-box; }
+              body { font-family: system-ui, sans-serif; margin: 0; padding: 0; }
+              .sheet {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                grid-auto-rows: 1fr;
+                gap: 0;
+                width: 100%;
+                height: 100vh;
+                page-break-after: always;
+              }
+              .cell {
+                border: 1px dashed #ccc;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 8px;
+                text-align: center;
+              }
+              .cell img { width: 90px; height: 90px; }
+              .cell .tag { font-size: 12px; font-weight: 600; margin-top: 4px; }
+              .cell .device { font-size: 10px; color: #666; }
+              @media print {
+                .sheet:last-child { page-break-after: auto; }
+              }
+            </style>
+          </head>
+          <body>
+            ${pages.map(pageHtml).join('')}
+            <script>
+              (function () {
+                var total = ${labels.length};
+                var loaded = 0;
+                window.__qrLoaded = function () {
+                  loaded += 1;
+                  if (loaded >= total) window.print();
+                };
+              })();
+            </script>
+          </body>
+        </html>`);
+      win.document.close();
+    } catch {
+      messageApi.error('Failed to generate QR labels.');
+    } finally {
+      setPrintingLabels(false);
+    }
   };
 
   const columns: ColumnsType<AssetDto> = [
@@ -207,12 +308,43 @@ export const AssetListPage = () => {
             }}
           />
         </Space>
+
+        {selectedRowKeys.length > 0 && (
+          <Space style={{ marginBottom: 16 }}>
+            <span>{selectedRowKeys.length} selected</span>
+            <Dropdown
+              menu={{
+                items: [
+                  {
+                    key: 'print-qr',
+                    icon: <PrinterOutlined />,
+                    label: 'Print Selected QR Labels',
+                    onClick: printBulkQrLabels,
+                  },
+                ],
+              }}
+              trigger={['click']}
+            >
+              <Button loading={printingLabels}>
+                Bulk Actions <DownOutlined />
+              </Button>
+            </Dropdown>
+          </Space>
+        )}
+
         <Table<AssetDto>
           rowKey="id"
           scroll={{ x: 'max-content' }}
           columns={columns}
           dataSource={query.data?.data ?? []}
           loading={query.isLoading}
+          rowSelection={{
+            selectedRowKeys,
+            onChange: (keys, rows) => {
+              setSelectedRowKeys(keys);
+              setSelectedAssets(rows);
+            },
+          }}
           pagination={{
             current: page,
             pageSize,

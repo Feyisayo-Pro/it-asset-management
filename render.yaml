@@ -1,0 +1,60 @@
+services:
+  - type: web
+    name: iam-backend
+    env: docker
+    plan: free
+    dockerfilePath: ./packages/backend/Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/v1/health/live
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: API_PREFIX
+        value: api/v1
+      - key: DB_SSL
+        value: true
+      - key: DB_SSL_REJECT_UNAUTHORIZED
+        value: false
+      - key: JWT_ACCESS_TTL_SECONDS
+        value: 900
+      - key: JWT_REFRESH_TTL_SECONDS
+        value: 1209600
+      - key: JWT_ISSUER
+        value: iam-backend
+      - key: JWT_AUDIENCE
+        value: iam-frontend
+      - key: LOGIN_MAX_ATTEMPTS
+        value: 5
+      - key: LOGIN_LOCKOUT_MINUTES
+        value: 15
+      - key: PASSWORD_RESET_TTL_MINUTES
+        value: 30
+      - key: THROTTLE_TTL_SECONDS
+        value: 60
+      - key: THROTTLE_LIMIT_GLOBAL
+        value: 120
+      - key: THROTTLE_LIMIT_AUTH
+        value: 10
+      # Secrets and deployment-specific values — set these in the
+      # Render dashboard (Environment tab), never committed here:
+      #   CORS_ORIGIN            the deployed frontend's origin
+      #   DATABASE_URL           Supabase pooler connection string
+      #   JWT_ACCESS_SECRET      openssl rand -base64 48
+      #   JWT_REFRESH_SECRET     openssl rand -base64 48
+      #   PASSWORD_RESET_URL_BASE   e.g. https://<frontend>/reset-password
+      #   BOOTSTRAP_ADMIN_EMAIL  only used if the users table is empty
+      #   BOOTSTRAP_ADMIN_PASSWORD
+      - key: CORS_ORIGIN
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_ACCESS_SECRET
+        sync: false
+      - key: JWT_REFRESH_SECRET
+        sync: false
+      - key: PASSWORD_RESET_URL_BASE
+        sync: false
+      - key: BOOTSTRAP_ADMIN_EMAIL
+        sync: false
+      - key: BOOTSTRAP_ADMIN_PASSWORD
+        sync: false

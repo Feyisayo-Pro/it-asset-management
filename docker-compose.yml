@@ -39,12 +39,18 @@ services:
       PORT: ${BACKEND_PORT:-3000}
       API_PREFIX: ${API_PREFIX:-api/v1}
       CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:8080}
-      DB_HOST: postgres
-      DB_PORT: 5432
+      # Set DATABASE_URL in .env to point the backend at a remote
+      # Postgres (e.g. Supabase) instead of the bundled `postgres`
+      # service below — it takes precedence over DB_HOST/DB_PORT/etc
+      # when present. Remember to also set DB_SSL=true in that case.
+      DATABASE_URL: ${DATABASE_URL:-}
+      DB_HOST: ${DB_HOST:-postgres}
+      DB_PORT: ${DB_PORT:-5432}
       DB_USER: ${POSTGRES_USER:-iam}
       DB_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set in .env}
       DB_NAME: ${POSTGRES_DB:-iam}
-      DB_SSL: 'false'
+      DB_SSL: ${DB_SSL:-false}
+      DB_SSL_REJECT_UNAUTHORIZED: ${DB_SSL_REJECT_UNAUTHORIZED:-false}
       JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET:?JWT_ACCESS_SECRET must be set in .env (min 32 chars)}
       JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:?JWT_REFRESH_SECRET must be set in .env (min 32 chars)}
       JWT_ACCESS_TTL_SECONDS: ${JWT_ACCESS_TTL_SECONDS:-900}

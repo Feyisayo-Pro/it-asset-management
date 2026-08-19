@@ -137,6 +137,8 @@ export class TypeOrmAssessmentRecordRepository implements AssessmentRecordReposi
     row.signatureIp = props.signatureIp;
     row.startedAt = props.startedAt;
     row.completedAt = props.completedAt;
+    row.specNonComplianceOverride = props.specNonComplianceOverride;
+    row.specOverrideJustification = props.specOverrideJustification;
     row.createdAt = props.createdAt;
     row.updatedAt = props.updatedAt;
     await this.repo.save(row);
@@ -172,6 +174,8 @@ export class TypeOrmAssessmentRecordRepository implements AssessmentRecordReposi
       signatureIp: row.signatureIp,
       startedAt: row.startedAt,
       completedAt: row.completedAt,
+      specNonComplianceOverride: row.specNonComplianceOverride,
+      specOverrideJustification: row.specOverrideJustification,
       createdAt: row.createdAt,
       updatedAt: row.updatedAt,
       results: results.map((r) => ({

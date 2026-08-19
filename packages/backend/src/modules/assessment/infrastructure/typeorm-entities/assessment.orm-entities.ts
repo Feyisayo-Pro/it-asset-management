@@ -105,6 +105,12 @@ export class AssessmentRecordOrmEntity {
   @Column({ type: 'timestamptz', nullable: true, name: 'completed_at' })
   completedAt!: Date | null;
 
+  @Column({ type: 'boolean', default: false, name: 'spec_non_compliance_override' })
+  specNonComplianceOverride!: boolean;
+
+  @Column({ type: 'text', nullable: true, name: 'spec_override_justification' })
+  specOverrideJustification!: string | null;
+
   @CreateDateColumn({ type: 'timestamptz', name: 'created_at' })
   createdAt!: Date;
 

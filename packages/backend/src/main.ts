@@ -20,8 +20,11 @@ async function bootstrap(): Promise<void> {
 
   app.setGlobalPrefix(appConfig.apiPrefix);
   app.use(helmet());
+  // CORS_ORIGIN accepts one origin or a comma-separated list (e.g. local
+  // dev + the deployed frontend at once) — a single value still works
+  // exactly as before.
   app.enableCors({
-    origin: appConfig.corsOrigin,
+    origin: appConfig.corsOrigin.split(',').map((o) => o.trim()).filter(Boolean),
     credentials: true,
   });
   app.useGlobalPipes(

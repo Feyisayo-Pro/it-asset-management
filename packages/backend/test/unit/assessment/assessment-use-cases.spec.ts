@@ -3,7 +3,11 @@ import { SaveAssessmentResultsUseCase } from '../../../src/modules/assessment/ap
 import { CompleteAssessmentRecordUseCase } from '../../../src/modules/assessment/application/use-cases/complete-assessment-record.use-case';
 import { Asset } from '../../../src/modules/asset/domain/entities/asset.entity';
 import { AssetNotFoundError } from '../../../src/common/errors/asset.errors';
-import { AssessmentTemplateNotFoundError } from '../../../src/common/errors/assessment.errors';
+import {
+  AssessmentTemplateNotFoundError,
+  HardwareSpecNonComplianceError,
+  SpecOverrideJustificationRequiredError,
+} from '../../../src/common/errors/assessment.errors';
 import { FakeAssetRepository } from '../asset/fakes';
 import {
   FakeAssessmentRecordRepository,
@@ -128,6 +132,8 @@ describe('Assessment use cases', () => {
         deviceCpuTier?: 'Entry' | 'Standard' | 'Performance';
         deviceRamGb?: number;
         deviceStorageGb?: number;
+        specNonComplianceOverride?: boolean;
+        specOverrideJustification?: string;
       },
     ) => {
       await seedAsset(ctx);
@@ -151,24 +157,57 @@ describe('Assessment use cases', () => {
           extra.deviceCpuTier && extra.deviceRamGb != null && extra.deviceStorageGb != null
             ? { cpuTier: extra.deviceCpuTier, ramGb: extra.deviceRamGb, storageGb: extra.deviceStorageGb }
             : undefined,
+        specNonComplianceOverride: extra.specNonComplianceOverride,
+        specOverrideJustification: extra.specOverrideJustification,
       });
     };
 
     // Per the real matrix (docs/22-sapphire-virtual-source-data.md §1):
     // Manager requires Standard/16GB/512GB; GeneralManager requires
     // Performance/16GB/512GB.
-    it('returns soft warnings for an under-spec device allocated to a role level with requirements', async () => {
+    it('blocks completion for an under-spec device with no Executive Override', async () => {
       const ctx = build();
-      const { specWarnings } = await completeAllocationAssessment(ctx, {
+      await expect(
+        completeAllocationAssessment(ctx, {
+          targetRoleLevel: 'Manager',
+          deviceCpuTier: 'Entry',
+          deviceRamGb: 8,
+          deviceStorageGb: 256,
+        }),
+      ).rejects.toThrow(HardwareSpecNonComplianceError);
+    });
+
+    it('blocks an Executive Override with no justification', async () => {
+      const ctx = build();
+      await expect(
+        completeAllocationAssessment(ctx, {
+          targetRoleLevel: 'Manager',
+          deviceCpuTier: 'Entry',
+          deviceRamGb: 8,
+          deviceStorageGb: 256,
+          specNonComplianceOverride: true,
+        }),
+      ).rejects.toThrow(SpecOverrideJustificationRequiredError);
+    });
+
+    it('completes and records the override when justification is supplied', async () => {
+      const ctx = build();
+      const { record, specWarnings } = await completeAllocationAssessment(ctx, {
         targetRoleLevel: 'Manager',
         deviceCpuTier: 'Entry',
         deviceRamGb: 8,
         deviceStorageGb: 256,
+        specNonComplianceOverride: true,
+        specOverrideJustification: 'Approved by IT Director pending upgrade stock.',
       });
       expect(specWarnings.length).toBe(3);
       expect(specWarnings.some((w) => w.includes('CPU tier'))).toBe(true);
       expect(specWarnings.some((w) => w.includes('RAM'))).toBe(true);
       expect(specWarnings.some((w) => w.includes('storage'))).toBe(true);
+      expect(record.specNonComplianceOverride).toBe(true);
+      expect(record.specOverrideJustification).toBe(
+        'Approved by IT Director pending upgrade stock.',
+      );
     });
 
     it('returns no warnings when the device meets the role level minimum', async () => {

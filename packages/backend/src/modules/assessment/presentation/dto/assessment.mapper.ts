@@ -30,6 +30,8 @@ export const toAssessmentDto = (r: AssessmentRecord) => ({
   photoUrls: r.photoUrls,
   signatureName: r.signatureName,
   signatureIp: r.signatureIp,
+  specNonComplianceOverride: r.specNonComplianceOverride,
+  specOverrideJustification: r.specOverrideJustification,
   startedAt: r.startedAt.toISOString(),
   completedAt: r.completedAt?.toISOString() ?? null,
   results: r.results.map((res) => ({

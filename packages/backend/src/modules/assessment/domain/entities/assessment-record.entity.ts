@@ -39,6 +39,11 @@ export interface AssessmentRecordProps {
   startedAt: Date;
   completedAt: Date | null;
   results: ItemResultEntry[];
+  /** True only when completion required overriding a non-compliant
+   *  hardware spec check (Allocation context) — see
+   *  HardwareSpecValidator / CompleteAssessmentRecordUseCase. */
+  specNonComplianceOverride: boolean;
+  specOverrideJustification: string | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -83,6 +88,8 @@ export class AssessmentRecord {
       startedAt: now,
       completedAt: null,
       results: [],
+      specNonComplianceOverride: false,
+      specOverrideJustification: null,
       createdAt: now,
       updatedAt: now,
     });
@@ -104,6 +111,8 @@ export class AssessmentRecord {
   get startedAt(): Date { return this.props.startedAt; }
   get completedAt(): Date | null { return this.props.completedAt; }
   get results(): ItemResultEntry[] { return [...this.props.results]; }
+  get specNonComplianceOverride(): boolean { return this.props.specNonComplianceOverride; }
+  get specOverrideJustification(): string | null { return this.props.specOverrideJustification; }
   get createdAt(): Date { return this.props.createdAt; }
   get updatedAt(): Date { return this.props.updatedAt; }
 
@@ -154,6 +163,8 @@ export class AssessmentRecord {
       photoUrls?: string[] | null;
       signatureName: string;
       signatureIp?: string | null;
+      specNonComplianceOverride?: boolean;
+      specOverrideJustification?: string | null;
     },
     now: Date,
   ): void {
@@ -185,6 +196,9 @@ export class AssessmentRecord {
     this.props.photoUrls = input.photoUrls?.length ? input.photoUrls : null;
     this.props.signatureName = input.signatureName.trim();
     this.props.signatureIp = input.signatureIp ?? null;
+    this.props.specNonComplianceOverride = input.specNonComplianceOverride ?? false;
+    this.props.specOverrideJustification =
+      input.specOverrideJustification?.trim() || null;
     this.props.status = 'Completed';
     this.props.completedAt = now;
     this.props.updatedAt = now;

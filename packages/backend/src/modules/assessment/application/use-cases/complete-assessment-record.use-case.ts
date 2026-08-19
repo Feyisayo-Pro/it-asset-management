@@ -16,6 +16,8 @@ import { AssessmentCompletedEvent } from '../../domain/events/assessment.events'
 import {
   AssessmentNotFoundError,
   AssessmentTemplateNotFoundError,
+  HardwareSpecNonComplianceError,
+  SpecOverrideJustificationRequiredError,
 } from '../../../../common/errors/assessment.errors';
 import { asyncContext } from '../../../../common/utils/async-context';
 import {
@@ -40,11 +42,24 @@ export interface CompleteAssessmentRecordCommand {
    */
   targetRoleLevel?: string;
   deviceSpec?: DeviceSpec;
+  /**
+   * Required to proceed when the spec check (above) finds the device
+   * below the target role level's minimum — see
+   * HardwareSpecNonComplianceError. Ignored (and never persisted as
+   * true) when there was nothing to override.
+   */
+  specNonComplianceOverride?: boolean;
+  specOverrideJustification?: string;
 }
 
 export interface CompleteAssessmentRecordResult {
   record: AssessmentRecord;
-  /** Soft, non-blocking advisories from HardwareSpecValidator — never fails completion. */
+  /**
+   * Advisories from HardwareSpecValidator. Non-empty means the device
+   * was below the target role level's minimum — completion only
+   * reached this point because it was either compliant or overridden
+   * (see HardwareSpecNonComplianceError for the blocking case).
+   */
   specWarnings: string[];
 }
 
@@ -69,6 +84,29 @@ export class CompleteAssessmentRecordUseCase {
     const template = await this.templates.findById(record.templateId);
     if (!template) throw new AssessmentTemplateNotFoundError(record.templateId);
 
+    // Spec check runs BEFORE completing — a non-compliant result without
+    // a valid override must block the write entirely, not just warn
+    // after the fact.
+    let specWarnings: string[] = [];
+    if (
+      record.contextType === AssessmentContextType.Allocation &&
+      command.targetRoleLevel &&
+      command.deviceSpec
+    ) {
+      specWarnings = this.specValidator.evaluate(
+        command.targetRoleLevel,
+        command.deviceSpec,
+      ).warnings;
+    }
+
+    const overrideUsed = specWarnings.length > 0 && command.specNonComplianceOverride === true;
+    if (specWarnings.length > 0 && !command.specNonComplianceOverride) {
+      throw new HardwareSpecNonComplianceError(command.targetRoleLevel!, specWarnings);
+    }
+    if (overrideUsed && !command.specOverrideJustification?.trim()) {
+      throw new SpecOverrideJustificationRequiredError();
+    }
+
     record.complete(
       template,
       {
@@ -78,6 +116,8 @@ export class CompleteAssessmentRecordUseCase {
         photoUrls: command.photoUrls,
         signatureName: command.signatureName,
         signatureIp: asyncContext.get()?.ip ?? null,
+        specNonComplianceOverride: overrideUsed,
+        specOverrideJustification: overrideUsed ? command.specOverrideJustification : null,
       },
       this.clock.now(),
     );
@@ -91,20 +131,11 @@ export class CompleteAssessmentRecordUseCase {
         contextId: record.contextId,
         outcome: command.outcome,
         technicianUserId: record.technicianUserId,
+        specWarnings,
+        specNonComplianceOverride: overrideUsed,
+        specOverrideJustification: overrideUsed ? (command.specOverrideJustification ?? null) : null,
       }),
     );
-
-    let specWarnings: string[] = [];
-    if (
-      record.contextType === AssessmentContextType.Allocation &&
-      command.targetRoleLevel &&
-      command.deviceSpec
-    ) {
-      specWarnings = this.specValidator.evaluate(
-        command.targetRoleLevel,
-        command.deviceSpec,
-      ).warnings;
-    }
 
     return { record, specWarnings };
   }

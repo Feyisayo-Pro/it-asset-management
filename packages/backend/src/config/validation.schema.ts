@@ -8,12 +8,16 @@ export const configValidationSchema = Joi.object({
   API_PREFIX: Joi.string().default('api/v1'),
   CORS_ORIGIN: Joi.string().default('http://localhost:5173'),
 
+  // Full connection string (e.g. Supabase pooler URL) — optional,
+  // overrides DB_HOST/DB_PORT/DB_USER/DB_PASSWORD/DB_NAME when set.
+  DATABASE_URL: Joi.string().uri().allow('').optional(),
   DB_HOST: Joi.string().default('localhost'),
   DB_PORT: Joi.number().port().default(5432),
   DB_USER: Joi.string().default('iam'),
   DB_PASSWORD: Joi.string().default('iam'),
   DB_NAME: Joi.string().default('iam'),
   DB_SSL: Joi.string().valid('true', 'false').default('false'),
+  DB_SSL_REJECT_UNAUTHORIZED: Joi.string().valid('true', 'false').default('false'),
 
   JWT_ACCESS_SECRET: Joi.string().min(32).required(),
   JWT_REFRESH_SECRET: Joi.string().min(32).optional().allow(''),

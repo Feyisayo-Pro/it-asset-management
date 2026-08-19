@@ -26,6 +26,11 @@ export class AssessmentCompletedEvent extends DomainEvent<{
   contextId: string | null;
   outcome: AssessmentOutcome;
   technicianUserId: string;
+  /** Hardware spec check outcome (Allocation context only) — see
+   *  HardwareSpecValidator / CompleteAssessmentRecordUseCase. */
+  specWarnings?: string[];
+  specNonComplianceOverride?: boolean;
+  specOverrideJustification?: string | null;
 }> {
   readonly name = 'assessment.completed';
 }

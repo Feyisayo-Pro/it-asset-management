@@ -1,6 +1,7 @@
 import {
   ArrayNotEmpty,
   IsArray,
+  IsBoolean,
   IsEnum,
   IsInt,
   IsNumber,
@@ -117,6 +118,23 @@ export class CompleteAssessmentRecordDto {
   @IsNumber()
   @Min(0)
   deviceStorageGb?: number;
+
+  @ApiPropertyOptional({
+    description:
+      'Required to proceed when the spec check finds the device below the target role level\'s minimum. Ignored if the device is compliant.',
+  })
+  @IsOptional()
+  @IsBoolean()
+  specNonComplianceOverride?: boolean;
+
+  @ApiPropertyOptional({
+    description: 'Required when specNonComplianceOverride is used.',
+    maxLength: 2000,
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(2000)
+  specOverrideJustification?: string;
 }
 
 export class ListAssessmentsQuery {

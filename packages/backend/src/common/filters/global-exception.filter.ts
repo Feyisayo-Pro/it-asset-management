@@ -159,6 +159,8 @@ function mapDomainToStatus(code: string): number {
   if (code === 'FAILED_ITEM_NOTE_REQUIRED') return HttpStatus.BAD_REQUEST;
   if (code === 'ASSESSMENT_SIGNATURE_REQUIRED') return HttpStatus.BAD_REQUEST;
   if (code === 'RECOMMENDATIONS_REQUIRED') return HttpStatus.BAD_REQUEST;
+  if (code === 'HARDWARE_SPEC_NON_COMPLIANCE') return HttpStatus.CONFLICT;
+  if (code === 'SPEC_OVERRIDE_JUSTIFICATION_REQUIRED') return HttpStatus.BAD_REQUEST;
   if (code === 'REPAIR_NOT_FOUND') return HttpStatus.NOT_FOUND;
   if (code === 'ACTIVE_REPAIR_EXISTS') return HttpStatus.CONFLICT;
   if (code === 'INVALID_REPAIR_STATUS_TRANSITION') return HttpStatus.CONFLICT;

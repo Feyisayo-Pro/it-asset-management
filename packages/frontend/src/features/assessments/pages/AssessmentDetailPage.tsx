@@ -14,6 +14,7 @@ import {
   Select,
   Skeleton,
   Space,
+  Switch,
   Tag,
   Typography,
   message,
@@ -25,6 +26,7 @@ import {
   AssessmentOutcome,
   CPU_TIER_LABELS,
   CpuTier,
+  evaluateSpec,
   ItemCategory,
   ItemResult,
   ROLE_LEVEL_LABELS,
@@ -68,6 +70,28 @@ export const AssessmentDetailPage = () => {
     warnings: string[];
   } | null>(null);
   const [form] = Form.useForm();
+
+  // Live client-side spec check as the completion form is filled in —
+  // the backend re-validates and is the actual enforcement point (see
+  // CompleteAssessmentRecordUseCase), this is purely for instant UI
+  // feedback so the override gate can block submission before a round trip.
+  const watchedRoleLevel = Form.useWatch('targetRoleLevel', form) as RoleLevel | undefined;
+  const watchedCpuTier = Form.useWatch('deviceCpuTier', form) as CpuTier | undefined;
+  const watchedRamGb = Form.useWatch('deviceRamGb', form) as number | undefined;
+  const watchedStorageGb = Form.useWatch('deviceStorageGb', form) as number | undefined;
+  const watchedOverride = Form.useWatch('overrideNonCompliance', form) as boolean | undefined;
+  const watchedJustification = Form.useWatch('overrideJustification', form) as string | undefined;
+
+  const liveWarnings =
+    watchedRoleLevel && watchedCpuTier && watchedRamGb != null && watchedStorageGb != null
+      ? evaluateSpec(watchedRoleLevel, {
+          cpuTier: watchedCpuTier,
+          ramGb: watchedRamGb,
+          storageGb: watchedStorageGb,
+        })
+      : [];
+  const overrideSatisfied = !!watchedOverride && !!watchedJustification?.trim();
+  const submitBlocked = liveWarnings.length > 0 && !overrideSatisfied;
 
   // Seed local draft from persisted results whenever the record loads.
   useEffect(() => {
@@ -125,7 +149,13 @@ export const AssessmentDetailPage = () => {
     deviceCpuTier?: CpuTier;
     deviceRamGb?: number;
     deviceStorageGb?: number;
+    overrideNonCompliance?: boolean;
+    overrideJustification?: string;
   }) => {
+    if (submitBlocked) {
+      messageApi.error('Resolve the hardware spec non-compliance before completing.');
+      return;
+    }
     try {
       // Persist any unsaved item results first so complete() sees them.
       const entries = Object.entries(draft)
@@ -149,12 +179,14 @@ export const AssessmentDetailPage = () => {
         deviceCpuTier: values.deviceCpuTier,
         deviceRamGb: values.deviceRamGb,
         deviceStorageGb: values.deviceStorageGb,
+        specNonComplianceOverride: liveWarnings.length > 0 ? values.overrideNonCompliance : undefined,
+        specOverrideJustification: liveWarnings.length > 0 ? values.overrideJustification : undefined,
       });
       messageApi.success('Assessment completed');
       setCompleteModal(false);
-      // specWarnings is never persisted (see CLAUDE.md — advisory only,
-      // computed at completion time), so this is the only chance to show
-      // it; capture it here rather than trying to re-derive it later.
+      // The raw specWarnings list isn't persisted on the record (only
+      // the override flag + justification are), so this is the only
+      // chance to show it; capture it here rather than re-deriving later.
       // Mirror the backend's exact gate (CompleteAssessmentRecordUseCase):
       // it only runs the check when targetRoleLevel AND all three device
       // spec fields are present — a partial fill sends no deviceSpec at
@@ -315,6 +347,12 @@ export const AssessmentDetailPage = () => {
           <Descriptions.Item label="Recommendations" span={2}>
             {a.recommendations ?? '—'}
           </Descriptions.Item>
+          {a.specNonComplianceOverride && (
+            <Descriptions.Item label="Executive Override" span={2}>
+              <Tag color="volcano">Non-compliant spec overridden</Tag>
+              <div style={{ marginTop: 4 }}>{a.specOverrideJustification}</div>
+            </Descriptions.Item>
+          )}
         </Descriptions>
         {a.photoUrls && a.photoUrls.length > 0 && (
           <div style={{ marginTop: 12 }}>
@@ -400,6 +438,45 @@ export const AssessmentDetailPage = () => {
                   <InputNumber min={0} style={{ width: '100%' }} placeholder="e.g. 512" />
                 </Form.Item>
               </Space>
+
+              {liveWarnings.length > 0 && watchedRoleLevel && (
+                <>
+                  <Alert
+                    type="error"
+                    showIcon
+                    style={{ marginBottom: 16 }}
+                    message={`Hardware Spec Non-Compliant for ${ROLE_LEVEL_LABELS[watchedRoleLevel]}`}
+                    description={
+                      <ul style={{ margin: 0, paddingLeft: 20 }}>
+                        {liveWarnings.map((w) => <li key={w}>{w}</li>)}
+                      </ul>
+                    }
+                  />
+                  <Form.Item name="overrideNonCompliance" valuePropName="checked">
+                    <Switch checkedChildren="Executive Override ON" unCheckedChildren="Executive Override" />
+                  </Form.Item>
+                  <Form.Item
+                    name="overrideJustification"
+                    label="Justification / Override Reason"
+                    rules={[
+                      {
+                        validator: async (_, value) => {
+                          if (watchedOverride && !value?.trim()) {
+                            throw new Error('A justification is required to override this spec check');
+                          }
+                        },
+                      },
+                    ]}
+                  >
+                    <Input.TextArea
+                      rows={2}
+                      maxLength={2000}
+                      disabled={!watchedOverride}
+                      placeholder="Explain why this device is being allocated despite not meeting the minimum spec"
+                    />
+                  </Form.Item>
+                </>
+              )}
             </>
           )}
 
@@ -411,7 +488,13 @@ export const AssessmentDetailPage = () => {
             <Input maxLength={255} placeholder="Full legal name" />
           </Form.Item>
           <Space>
-            <Button type="primary" htmlType="submit" loading={complete.isPending}>
+            <Button
+              type="primary"
+              htmlType="submit"
+              loading={complete.isPending}
+              disabled={submitBlocked}
+              title={submitBlocked ? 'Enable Executive Override and provide a justification to continue' : undefined}
+            >
               Sign & complete
             </Button>
             <Button onClick={() => setCompleteModal(false)}>Cancel</Button>

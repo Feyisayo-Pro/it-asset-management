@@ -55,3 +55,20 @@ export class RecommendationsRequiredError extends ApplicationError {
     super('Non-pass outcomes require recommendations', { outcome });
   }
 }
+
+export class HardwareSpecNonComplianceError extends ApplicationError {
+  readonly code = 'HARDWARE_SPEC_NON_COMPLIANCE';
+  constructor(roleLevel: string, warnings: string[]) {
+    super(
+      `Hardware Spec Non-Compliant for ${roleLevel} — completion requires an Executive Override with justification`,
+      { roleLevel, warnings },
+    );
+  }
+}
+
+export class SpecOverrideJustificationRequiredError extends ApplicationError {
+  readonly code = 'SPEC_OVERRIDE_JUSTIFICATION_REQUIRED';
+  constructor() {
+    super('An Executive Override requires a justification');
+  }
+}

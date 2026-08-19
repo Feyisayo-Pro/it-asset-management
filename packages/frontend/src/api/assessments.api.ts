@@ -39,6 +39,53 @@ export const ROLE_LEVEL_LABELS: Record<RoleLevel, string> = {
   Director: 'Director',
 };
 
+// Mirrors backend ROLE_LEVEL_SPEC_REQUIREMENTS (hardware-spec-validator.ts)
+// for instant client-side feedback while filling the completion form —
+// the backend re-validates and is the actual enforcement point.
+const CPU_TIER_RANK: Record<CpuTier, number> = { Entry: 0, Standard: 1, Performance: 2 };
+interface RoleLevelSpecRequirement {
+  minCpuTier: CpuTier;
+  minRamGb: number;
+  minStorageGb: number;
+}
+export const ROLE_LEVEL_SPEC_REQUIREMENTS: Record<RoleLevel, RoleLevelSpecRequirement | null> = {
+  Operative: { minCpuTier: 'Entry', minRamGb: 8, minStorageGb: 256 },
+  Officer: { minCpuTier: 'Standard', minRamGb: 8, minStorageGb: 256 },
+  SeniorOfficer: { minCpuTier: 'Standard', minRamGb: 8, minStorageGb: 256 },
+  AssistantManager: { minCpuTier: 'Standard', minRamGb: 16, minStorageGb: 512 },
+  Manager: { minCpuTier: 'Standard', minRamGb: 16, minStorageGb: 512 },
+  SeniorManager: { minCpuTier: 'Standard', minRamGb: 16, minStorageGb: 512 },
+  AssistantGeneralManager: { minCpuTier: 'Standard', minRamGb: 16, minStorageGb: 512 },
+  DeputyGeneralManager: { minCpuTier: 'Standard', minRamGb: 16, minStorageGb: 512 },
+  GeneralManager: { minCpuTier: 'Performance', minRamGb: 16, minStorageGb: 512 },
+  Director: null,
+};
+
+export function evaluateSpec(
+  roleLevel: RoleLevel,
+  spec: { cpuTier: CpuTier; ramGb: number; storageGb: number },
+): string[] {
+  const requirement = ROLE_LEVEL_SPEC_REQUIREMENTS[roleLevel];
+  if (!requirement) return [];
+  const warnings: string[] = [];
+  if (CPU_TIER_RANK[spec.cpuTier] < CPU_TIER_RANK[requirement.minCpuTier]) {
+    warnings.push(
+      `Selected device's CPU tier (${spec.cpuTier}) is below the ${roleLevel} role level's minimum (${requirement.minCpuTier}).`,
+    );
+  }
+  if (spec.ramGb < requirement.minRamGb) {
+    warnings.push(
+      `Selected device has ${spec.ramGb}GB RAM, below the ${roleLevel} role level's minimum of ${requirement.minRamGb}GB.`,
+    );
+  }
+  if (spec.storageGb < requirement.minStorageGb) {
+    warnings.push(
+      `Selected device has ${spec.storageGb}GB storage, below the ${roleLevel} role level's minimum of ${requirement.minStorageGb}GB.`,
+    );
+  }
+  return warnings;
+}
+
 export interface TemplateItemDto {
   code: string;
   label: string;
@@ -70,6 +117,8 @@ export interface AssessmentDto {
   photoUrls: string[] | null;
   signatureName: string | null;
   signatureIp: string | null;
+  specNonComplianceOverride: boolean;
+  specOverrideJustification: string | null;
   startedAt: string;
   completedAt: string | null;
   results: Array<{ itemCode: string; result: ItemResult; note: string | null }>;
@@ -138,6 +187,10 @@ export const assessmentsApi = {
       deviceCpuTier?: CpuTier;
       deviceRamGb?: number;
       deviceStorageGb?: number;
+      /** Required to proceed when the device is below the target role
+       *  level's minimum — see evaluateSpec(). */
+      specNonComplianceOverride?: boolean;
+      specOverrideJustification?: string;
     },
   ): Promise<AssessmentDto & { specWarnings: string[] }> => {
     const { data } = await client.post<AssessmentDto & { specWarnings: string[] }>(

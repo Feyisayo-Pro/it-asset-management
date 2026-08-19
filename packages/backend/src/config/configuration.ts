@@ -6,12 +6,15 @@ export interface AppConfig {
 }
 
 export interface DatabaseConfig {
+  /** Full connection string (e.g. Supabase's pooler URL) — when set,
+   *  takes precedence over the individual host/port/user/... fields. */
+  url?: string;
   host: string;
   port: number;
   username: string;
   password: string;
   database: string;
-  ssl: boolean;
+  ssl: boolean | { rejectUnauthorized: boolean };
 }
 
 export interface JwtConfigValues {
@@ -76,12 +79,21 @@ export const loadConfiguration = (): RootConfig => ({
     corsOrigin: process.env.CORS_ORIGIN ?? 'http://localhost:5173',
   },
   database: {
+    url: process.env.DATABASE_URL || undefined,
     host: process.env.DB_HOST ?? 'localhost',
     port: num(process.env.DB_PORT, 5432),
     username: process.env.DB_USER ?? 'iam',
     password: process.env.DB_PASSWORD ?? 'iam',
     database: process.env.DB_NAME ?? 'iam',
-    ssl: bool(process.env.DB_SSL, false),
+    // Cloud Postgres providers (Supabase's pooler included) require SSL
+    // but their certs commonly aren't in Node's default CA trust store,
+    // so full chain validation needs to be explicitly disabled — this
+    // is the standard, documented tradeoff for connecting without
+    // vendoring the provider's CA bundle, not a default for local use
+    // (DB_SSL is false by default, matching plain local/Docker Postgres).
+    ssl: bool(process.env.DB_SSL, false)
+      ? { rejectUnauthorized: bool(process.env.DB_SSL_REJECT_UNAUTHORIZED, false) }
+      : false,
   },
   jwt: {
     accessSecret: process.env.JWT_ACCESS_SECRET ?? '',

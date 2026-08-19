@@ -214,7 +214,10 @@ export class AssetController {
   async qr(@Param('id', ParseUUIDPipe) id: string, @Res() res: Response) {
     const asset = await this.getAsset.byId(id);
     const { corsOrigin } = this.config.getOrThrow<RootConfig['app']>('app');
-    const url = `${corsOrigin.replace(/\/$/, '')}/assets/tag/${asset.assetTag}`;
+    // CORS_ORIGIN may be a comma-separated list (local + deployed
+    // frontend) — the QR always points at the first (primary) origin.
+    const primaryOrigin = corsOrigin.split(',')[0].trim();
+    const url = `${primaryOrigin.replace(/\/$/, '')}/assets/tag/${asset.assetTag}`;
     const buf = await this.barcodes.qrPngBuffer(url);
     res.setHeader('Content-Type', 'image/png');
     res.send(buf);

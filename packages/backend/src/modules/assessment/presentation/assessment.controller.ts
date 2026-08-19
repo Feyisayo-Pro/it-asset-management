@@ -10,6 +10,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
+import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { RequirePermissions } from '../../../common/decorators/permissions.decorator';
 import {
   AuthenticatedUser,
@@ -108,6 +109,23 @@ export class AssessmentController {
   @Post(':id/complete')
   @HttpCode(HttpStatus.OK)
   @RequirePermissions(Permission.AssessmentManage)
+  @ApiOperation({
+    summary: 'Complete a draft assessment',
+    description:
+      'For Allocation-context assessments with targetRoleLevel + full deviceSpec supplied, runs the hardware spec check first: a non-compliant result blocks completion (409) unless specNonComplianceOverride is set with a specOverrideJustification.',
+  })
+  @ApiParam({ name: 'id', format: 'uuid' })
+  @ApiResponse({ status: 200, description: 'Assessment completed' })
+  @ApiResponse({ status: 404, description: 'Assessment or template not found' })
+  @ApiResponse({
+    status: 409,
+    description:
+      'Assessment already completed, or hardware spec non-compliant without a valid override',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Checklist incomplete / missing required fields, or override missing justification',
+  })
   async complete(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() dto: CompleteAssessmentRecordDto,
@@ -124,6 +142,8 @@ export class AssessmentController {
         dto.deviceCpuTier && dto.deviceRamGb != null && dto.deviceStorageGb != null
           ? { cpuTier: dto.deviceCpuTier, ramGb: dto.deviceRamGb, storageGb: dto.deviceStorageGb }
           : undefined,
+      specNonComplianceOverride: dto.specNonComplianceOverride,
+      specOverrideJustification: dto.specOverrideJustification,
     });
     return { ...toAssessmentDto(record), specWarnings };
   }
