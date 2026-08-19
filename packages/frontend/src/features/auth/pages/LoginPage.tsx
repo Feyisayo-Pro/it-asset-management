@@ -30,6 +30,10 @@ export const LoginPage = () => {
         setError('Account temporarily locked due to failed attempts. Try again shortly.');
       } else if (apiError.code === 'AUTH_ACCOUNT_DISABLED') {
         setError('This account has been deactivated.');
+      } else if (apiError.code === 'NETWORK_ERROR') {
+        setError(
+          "Couldn't reach the server — it may be waking up after being idle. Please wait a few seconds and try again.",
+        );
       } else {
         setError('Invalid email or password.');
       }

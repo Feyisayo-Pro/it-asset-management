@@ -5,7 +5,11 @@ import { normalizeAxiosError } from './error';
 
 export const client: AxiosInstance = axios.create({
   baseURL: env.apiBaseUrl,
-  timeout: 30_000,
+  // The backend host can cold-start from idle (e.g. a free-tier
+  // server spinning back up), which can take longer than a typical
+  // request — a short timeout here turns "still booting" into a
+  // false "invalid credentials"-looking failure on login.
+  timeout: 60_000,
   headers: { 'Content-Type': 'application/json' },
 });
 
