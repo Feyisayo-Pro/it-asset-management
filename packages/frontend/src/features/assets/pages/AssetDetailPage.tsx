@@ -16,6 +16,7 @@ import {
 } from 'antd';
 import { EditOutlined, PrinterOutlined } from '@ant-design/icons';
 import { PageHeader } from '@/components/PageHeader';
+import { AuthedImage } from '@/components/AuthedImage';
 import { AssetStatusBadge } from '../components/AssetStatusBadge';
 import { useAsset, useAssetHistory, useChangeAssetStatus } from '../hooks/useAssets';
 import { assetsApi } from '@/api/assets.api';
@@ -53,6 +54,7 @@ export const AssetDetailPage = () => {
     to: null,
   });
   const [transitionForm] = Form.useForm();
+  const [printing, setPrinting] = useState(false);
 
   if (asset.isLoading || !asset.data)
     return (
@@ -82,6 +84,42 @@ export const AssetDetailPage = () => {
     }
   };
 
+  const printQrTag = async () => {
+    setPrinting(true);
+    try {
+      const blob = await assetsApi.qrBlob(a.id);
+      const url = URL.createObjectURL(blob);
+      const win = window.open('', '_blank', 'width=420,height=520');
+      if (!win) {
+        messageApi.error('Pop-up blocked — allow pop-ups for this site to print the QR tag.');
+        URL.revokeObjectURL(url);
+        return;
+      }
+      win.document.write(`<!doctype html>
+        <html>
+          <head>
+            <title>QR tag — ${a.assetTag}</title>
+            <style>
+              body { font-family: system-ui, sans-serif; text-align: center; padding: 32px; }
+              img { width: 220px; height: 220px; }
+              h2 { margin: 12px 0 2px; font-size: 18px; }
+              p { margin: 0; color: #555; font-size: 13px; }
+            </style>
+          </head>
+          <body>
+            <img src="${url}" alt="QR code" onload="window.print()" />
+            <h2>${a.assetTag}</h2>
+            <p>${a.brand} ${a.model}</p>
+          </body>
+        </html>`);
+      win.document.close();
+    } catch {
+      messageApi.error('Failed to generate the QR tag.');
+    } finally {
+      setPrinting(false);
+    }
+  };
+
   return (
     <div>
       {contextHolder}
@@ -90,11 +128,8 @@ export const AssetDetailPage = () => {
         subtitle={`${a.brand} ${a.model}`}
         actions={
           <>
-            <Button
-              icon={<PrinterOutlined />}
-              onClick={() => window.open(assetsApi.qrUrl(a.id), '_blank')}
-            >
-              QR code
+            <Button icon={<PrinterOutlined />} loading={printing} onClick={printQrTag}>
+              Print QR tag
             </Button>
             <Button
               icon={<EditOutlined />}
@@ -131,9 +166,9 @@ export const AssetDetailPage = () => {
         </Space>
       </Card>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 16 }}>
+      <div className="responsive-grid" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 16 }}>
         <Card title="Details">
-          <Descriptions column={2} bordered size="small">
+          <Descriptions column={{ xs: 1, sm: 1, md: 2 }} bordered size="small">
             <Descriptions.Item label="Status">
               <AssetStatusBadge status={a.status} />
             </Descriptions.Item>
@@ -150,6 +185,9 @@ export const AssetDetailPage = () => {
             <Descriptions.Item label="Warranty">{a.warrantyExpiry ?? '—'}</Descriptions.Item>
             <Descriptions.Item label="Office">{a.officeLocation ?? '—'}</Descriptions.Item>
             <Descriptions.Item label="Department">{a.department ?? '—'}</Descriptions.Item>
+            <Descriptions.Item label="Assigned to">
+              {a.assignedEmployeeName ?? '—'}
+            </Descriptions.Item>
             <Descriptions.Item label="Current holder">
               {a.currentHolderId ?? '—'}
             </Descriptions.Item>
@@ -164,9 +202,9 @@ export const AssetDetailPage = () => {
             <div>
               <Typography.Text type="secondary">QR code</Typography.Text>
               <div>
-                <img
+                <AuthedImage
                   alt="QR"
-                  src={assetsApi.qrUrl(a.id)}
+                  fetcher={() => assetsApi.qrBlob(a.id)}
                   style={{ maxWidth: '100%', border: '1px solid #eee', padding: 8 }}
                 />
               </div>
@@ -174,9 +212,9 @@ export const AssetDetailPage = () => {
             <div>
               <Typography.Text type="secondary">Barcode</Typography.Text>
               <div>
-                <img
+                <AuthedImage
                   alt="Barcode"
-                  src={assetsApi.barcodeUrl(a.id)}
+                  fetcher={() => assetsApi.barcodeBlob(a.id)}
                   style={{ maxWidth: '100%', border: '1px solid #eee', padding: 8 }}
                 />
               </div>

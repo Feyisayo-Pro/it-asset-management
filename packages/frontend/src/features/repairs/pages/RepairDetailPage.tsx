@@ -159,7 +159,7 @@ export const RepairDetailPage = () => {
         </Space>
       </Card>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+      <div className="responsive-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
         <Card title="Details">
           <Descriptions column={1} size="small" bordered>
             <Descriptions.Item label="Asset">{r.assetId}</Descriptions.Item>

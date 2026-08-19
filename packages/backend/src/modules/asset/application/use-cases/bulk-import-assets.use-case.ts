@@ -30,6 +30,7 @@ interface CsvRow {
   warranty_expiry?: string;
   office_location?: string;
   department?: string;
+  assigned_employee_name?: string;
   notes?: string;
 }
 
@@ -121,6 +122,7 @@ export class BulkImportAssetsUseCase {
         warrantyExpiry: cell(row.warranty_expiry),
         officeLocation: cell(row.office_location),
         department: cell(row.department),
+        assignedEmployeeName: cell(row.assigned_employee_name),
         notes: cell(row.notes),
       });
 
@@ -190,6 +192,7 @@ export class BulkImportAssetsUseCase {
           warrantyExpiry: candidate.warrantyExpiry ? new Date(candidate.warrantyExpiry) : null,
           officeLocation: candidate.officeLocation ?? null,
           department: candidate.department ?? null,
+          assignedEmployeeName: candidate.assignedEmployeeName ?? null,
           notes: candidate.notes ?? null,
           now,
         });

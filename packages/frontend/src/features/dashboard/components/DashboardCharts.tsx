@@ -12,10 +12,10 @@ interface Props {
 }
 
 const CHART_COLORS = {
-  department: '#1B73E8',
+  department: '#1A4FD1',
   brand: '#9334E6',
   type: '#34A853',
-  allocation: '#1B73E8',
+  allocation: '#1A4FD1',
   returns: '#34A853',
   repairs: '#fa8c16',
 };

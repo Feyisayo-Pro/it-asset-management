@@ -18,6 +18,7 @@ export class AssetDto {
   @ApiProperty({ nullable: true, example: '2028-01-15' }) warrantyExpiry!: string | null;
   @ApiProperty({ nullable: true, example: 'HQ - Lagos' }) officeLocation!: string | null;
   @ApiProperty({ nullable: true, example: 'Engineering' }) department!: string | null;
+  @ApiProperty({ nullable: true, example: 'Ogunsola Gabriel' }) assignedEmployeeName!: string | null;
   @ApiProperty({ nullable: true }) currentHolderId!: string | null;
   @ApiProperty({ enum: ALL_ASSET_STATUSES }) status!: AssetStatus;
   @ApiProperty({ nullable: true }) notes!: string | null;
@@ -59,6 +60,7 @@ export const toAssetDto = (a: Asset): AssetDto => ({
     : null,
   officeLocation: a.officeLocation,
   department: a.department,
+  assignedEmployeeName: a.assignedEmployeeName,
   currentHolderId: a.currentHolderId,
   status: a.status,
   notes: a.notes,

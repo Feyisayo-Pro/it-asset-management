@@ -28,6 +28,7 @@ export interface UpdateAssetCommand {
   warrantyExpiry?: string | null;
   officeLocation?: string | null;
   department?: string | null;
+  assignedEmployeeName?: string | null;
   notes?: string | null;
 }
 
@@ -101,6 +102,7 @@ export class UpdateAssetUseCase {
     );
     assign('officeLocation', command.officeLocation, asset.officeLocation);
     assign('department', command.department, asset.department);
+    assign('assignedEmployeeName', command.assignedEmployeeName, asset.assignedEmployeeName);
     assign('notes', command.notes, asset.notes);
 
     if (changed.length === 0) return asset;

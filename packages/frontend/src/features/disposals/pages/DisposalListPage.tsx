@@ -65,7 +65,7 @@ export const DisposalListPage = () => {
         }
       />
       <Card>
-        <Space style={{ marginBottom: 16 }}>
+        <Space className="list-filters" style={{ marginBottom: 16 }} wrap>
           <Select<DisposalStatus>
             placeholder="All statuses"
             allowClear
@@ -80,6 +80,7 @@ export const DisposalListPage = () => {
         </Space>
         <Table<DisposalDto>
           rowKey="id"
+          scroll={{ x: 'max-content' }}
           columns={columns}
           dataSource={query.data?.data ?? []}
           loading={query.isLoading}

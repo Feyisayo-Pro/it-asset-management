@@ -20,6 +20,7 @@ export const assetFormSchema = z.object({
   warrantyExpiry: z.string().optional(),
   officeLocation: z.string().trim().max(128).optional(),
   department: z.string().trim().max(128).optional(),
+  assignedEmployeeName: z.string().trim().max(128).optional(),
   notes: z.string().optional(),
   markAvailableImmediately: z.boolean().optional(),
 });

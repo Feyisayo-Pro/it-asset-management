@@ -120,6 +120,7 @@ export class TypeOrmAssetRepository implements AssetRepository {
       .addSelect('a.warrantyExpiry', 'warranty_expiry')
       .addSelect('a.officeLocation', 'office_location')
       .addSelect('a.department', 'department')
+      .addSelect('a.assignedEmployeeName', 'assigned_employee_name')
       .addSelect('a.currentHolderId', 'current_holder_id')
       .addSelect('a.notes', 'notes')
       .orderBy('a.createdAt', 'ASC');
@@ -151,6 +152,8 @@ export class TypeOrmAssetRepository implements AssetRepository {
               : '',
             office_location: row.office_location == null ? '' : String(row.office_location),
             department: row.department == null ? '' : String(row.department),
+            assigned_employee_name:
+              row.assigned_employee_name == null ? '' : String(row.assigned_employee_name),
             current_holder_id:
               row.current_holder_id == null ? '' : String(row.current_holder_id),
             notes: row.notes == null ? '' : String(row.notes),
@@ -256,6 +259,7 @@ export class TypeOrmAssetRepository implements AssetRepository {
       warrantyExpiry: row.warrantyExpiry,
       officeLocation: row.officeLocation,
       department: row.department,
+      assignedEmployeeName: row.assignedEmployeeName,
       currentHolderId: row.currentHolderId,
       status: row.status as AssetStatus,
       notes: row.notes,
@@ -281,6 +285,7 @@ export class TypeOrmAssetRepository implements AssetRepository {
     row.warrantyExpiry = props.warrantyExpiry;
     row.officeLocation = props.officeLocation;
     row.department = props.department;
+    row.assignedEmployeeName = props.assignedEmployeeName;
     row.currentHolderId = props.currentHolderId;
     row.status = props.status;
     row.notes = props.notes;

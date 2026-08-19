@@ -28,7 +28,7 @@ export const AssetForm = ({ mode, initialValues, submitting, onSubmit, onCancel 
 
   return (
     <Form layout="vertical" onFinish={form.handleSubmit(onSubmit)}>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+      <div className="responsive-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
         {isCreate && (
           <Controller
             control={form.control}
@@ -60,7 +60,7 @@ export const AssetForm = ({ mode, initialValues, submitting, onSubmit, onCancel 
         />
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
+      <div className="responsive-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
         <Controller
           control={form.control}
           name="deviceType"
@@ -105,7 +105,7 @@ export const AssetForm = ({ mode, initialValues, submitting, onSubmit, onCancel 
         />
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
+      <div className="responsive-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
         <Controller
           control={form.control}
           name="imei"
@@ -135,7 +135,7 @@ export const AssetForm = ({ mode, initialValues, submitting, onSubmit, onCancel 
         />
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
+      <div className="responsive-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
         <Controller
           control={form.control}
           name="purchaseAmount"
@@ -178,7 +178,7 @@ export const AssetForm = ({ mode, initialValues, submitting, onSubmit, onCancel 
         />
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+      <div className="responsive-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
         <Controller
           control={form.control}
           name="officeLocation"
@@ -193,6 +193,15 @@ export const AssetForm = ({ mode, initialValues, submitting, onSubmit, onCancel 
           name="department"
           render={({ field }) => (
             <Form.Item label="Department">
+              <Input {...field} maxLength={128} />
+            </Form.Item>
+          )}
+        />
+        <Controller
+          control={form.control}
+          name="assignedEmployeeName"
+          render={({ field }) => (
+            <Form.Item label="Assigned to" tooltip="Display-only employee name — not a system user account">
               <Input {...field} maxLength={128} />
             </Form.Item>
           )}

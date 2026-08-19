@@ -26,6 +26,14 @@ export const useAsset = (id: string | undefined) =>
     enabled: !!id,
   });
 
+export const useAssetByTag = (tag: string | undefined) =>
+  useQuery({
+    queryKey: tag ? queryKeys.assets.byTag(tag) : ['assets', 'detail', 'byTag', 'noop'],
+    queryFn: () => assetsApi.getByTag(tag as string),
+    enabled: !!tag,
+    retry: false,
+  });
+
 export const useAssetHistory = (id: string | undefined) =>
   useQuery({
     queryKey: id ? queryKeys.assets.history(id) : ['assets', 'history', 'noop'],

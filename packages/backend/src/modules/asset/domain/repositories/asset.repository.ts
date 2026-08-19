@@ -43,6 +43,7 @@ export interface AssetExportRow {
   warranty_expiry: string;
   office_location: string;
   department: string;
+  assigned_employee_name: string;
   current_holder_id: string;
   notes: string;
 }

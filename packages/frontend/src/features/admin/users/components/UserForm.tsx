@@ -68,7 +68,7 @@ export const UserForm = (props: Props) => {
 
   return (
     <Form layout="vertical" onFinish={submit}>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+      <div className="responsive-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
         <Controller
           control={form.control}
           name="firstName"
@@ -130,7 +130,7 @@ export const UserForm = (props: Props) => {
               </Form.Item>
             )}
           />
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+          <div className="responsive-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
             <Controller
               control={form.control}
               name={'password' as never}

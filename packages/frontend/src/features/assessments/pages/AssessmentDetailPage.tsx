@@ -180,6 +180,7 @@ export const AssessmentDetailPage = () => {
     return (
       <div
         key={item.code}
+        className="checklist-item-grid"
         style={{
           display: 'grid',
           gridTemplateColumns: '220px 220px 1fr',
@@ -299,7 +300,7 @@ export const AssessmentDetailPage = () => {
       </Card>
 
       <Card title="Result" style={{ marginTop: 16 }}>
-        <Descriptions column={2} size="small" bordered>
+        <Descriptions column={{ xs: 1, sm: 1, md: 2 }} size="small" bordered>
           <Descriptions.Item label="Status">
             <Tag color={a.status === 'Completed' ? 'green' : 'gold'}>{a.status}</Tag>
           </Descriptions.Item>

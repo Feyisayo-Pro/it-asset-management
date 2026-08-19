@@ -40,6 +40,7 @@ export const AssetCreatePage = () => {
                 warrantyExpiry: values.warrantyExpiry || null,
                 officeLocation: values.officeLocation || null,
                 department: values.department || null,
+                assignedEmployeeName: values.assignedEmployeeName || null,
                 notes: values.notes || null,
                 markAvailableImmediately: values.markAvailableImmediately ?? false,
               });

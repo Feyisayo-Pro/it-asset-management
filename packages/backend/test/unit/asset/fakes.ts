@@ -103,6 +103,7 @@ export class FakeAssetRepository implements AssetRepository {
       warranty_expiry: a.warrantyExpiry ? a.warrantyExpiry.toISOString().slice(0, 10) : '',
       office_location: a.officeLocation ?? '',
       department: a.department ?? '',
+      assigned_employee_name: a.assignedEmployeeName ?? '',
       current_holder_id: a.currentHolderId ?? '',
       notes: a.notes ?? '',
     }));

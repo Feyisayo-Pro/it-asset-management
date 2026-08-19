@@ -22,6 +22,7 @@ export interface AssetProps {
   warrantyExpiry: Date | null;
   officeLocation: string | null;
   department: string | null;
+  assignedEmployeeName: string | null;
   currentHolderId: string | null;
   status: AssetStatus;
   notes: string | null;
@@ -55,6 +56,7 @@ export class Asset {
     warrantyExpiry?: Date | null;
     officeLocation?: string | null;
     department?: string | null;
+    assignedEmployeeName?: string | null;
     notes?: string | null;
     now?: Date;
   }): Asset {
@@ -81,6 +83,7 @@ export class Asset {
       warrantyExpiry: input.warrantyExpiry ?? null,
       officeLocation: input.officeLocation?.trim() || null,
       department: input.department?.trim() || null,
+      assignedEmployeeName: input.assignedEmployeeName?.trim() || null,
       currentHolderId: null,
       status: AssetStatus.Registration,
       notes: input.notes ?? null,
@@ -103,6 +106,7 @@ export class Asset {
   get warrantyExpiry(): Date | null { return this.props.warrantyExpiry; }
   get officeLocation(): string | null { return this.props.officeLocation; }
   get department(): string | null { return this.props.department; }
+  get assignedEmployeeName(): string | null { return this.props.assignedEmployeeName; }
   get currentHolderId(): string | null { return this.props.currentHolderId; }
   get status(): AssetStatus { return this.props.status; }
   get notes(): string | null { return this.props.notes; }
@@ -124,6 +128,7 @@ export class Asset {
         | 'warrantyExpiry'
         | 'officeLocation'
         | 'department'
+        | 'assignedEmployeeName'
         | 'notes'
       >
     >,

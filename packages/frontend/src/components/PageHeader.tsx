@@ -13,10 +13,12 @@ export const PageHeader = ({ title, subtitle, actions }: Props) => (
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
+      flexWrap: 'wrap',
+      gap: 12,
       marginBottom: 24,
     }}
   >
-    <div>
+    <div style={{ minWidth: 0 }}>
       <Typography.Title level={3} style={{ margin: 0 }}>
         {title}
       </Typography.Title>
@@ -24,6 +26,6 @@ export const PageHeader = ({ title, subtitle, actions }: Props) => (
         <Typography.Text type="secondary">{subtitle}</Typography.Text>
       )}
     </div>
-    {actions && <Space>{actions}</Space>}
+    {actions && <Space wrap>{actions}</Space>}
   </div>
 );

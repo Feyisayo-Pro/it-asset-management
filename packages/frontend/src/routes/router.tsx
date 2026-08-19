@@ -10,6 +10,7 @@ import { AssetListPage } from '@/features/assets/pages/AssetListPage';
 import { AssetCreatePage } from '@/features/assets/pages/AssetCreatePage';
 import { AssetEditPage } from '@/features/assets/pages/AssetEditPage';
 import { AssetDetailPage } from '@/features/assets/pages/AssetDetailPage';
+import { AssetTagRedirectPage } from '@/features/assets/pages/AssetTagRedirectPage';
 import { ReturnListPage } from '@/features/returns/pages/ReturnListPage';
 import { InitiateReturnPage } from '@/features/returns/pages/InitiateReturnPage';
 import { ReturnDetailPage } from '@/features/returns/pages/ReturnDetailPage';
@@ -72,6 +73,7 @@ export const router = createBrowserRouter([
       { path: 'dashboard/analytics', element: <DashboardPage /> },
       { path: 'assets', element: <AssetListPage /> },
       { path: 'assets/new', element: <AssetCreatePage /> },
+      { path: 'assets/tag/:tag', element: <AssetTagRedirectPage /> },
       { path: 'assets/:id', element: <AssetDetailPage /> },
       { path: 'assets/:id/edit', element: <AssetEditPage /> },
       { path: 'assessments', element: <AssessmentListPage /> },

@@ -15,7 +15,7 @@ interface Props {
 export const SimpleBarChart = ({
   data,
   title,
-  color = '#1B73E8',
+  color = '#1A4FD1',
   height = 200,
 }: Props) => {
   if (data.length === 0) return null;
@@ -106,7 +106,7 @@ interface PieProps {
   size?: number;
 }
 
-const PIE_COLORS = ['#1B73E8', '#34A853', '#EA4335', '#FBBC04', '#9334E6', '#FF6D01', '#46BDC6', '#7BAAF7'];
+const PIE_COLORS = ['#1A4FD1', '#14A6A6', '#EA4335', '#F5A623', '#9334E6', '#FF6D01', '#46BDC6', '#9FE0EE'];
 
 export const SimplePieChart = ({ data, title, size = 160 }: PieProps) => {
   if (data.length === 0) return null;

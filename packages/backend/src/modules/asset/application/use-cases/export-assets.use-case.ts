@@ -22,6 +22,7 @@ const COLUMNS = [
   'warranty_expiry',
   'office_location',
   'department',
+  'assigned_employee_name',
   'current_holder_id',
   'notes',
 ];

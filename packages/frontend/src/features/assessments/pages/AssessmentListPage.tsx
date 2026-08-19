@@ -75,7 +75,7 @@ export const AssessmentListPage = () => {
         }
       />
       <Card>
-        <Space style={{ marginBottom: 16 }}>
+        <Space className="list-filters" style={{ marginBottom: 16 }} wrap>
           <Select
             placeholder="All statuses"
             allowClear
@@ -92,6 +92,7 @@ export const AssessmentListPage = () => {
         </Space>
         <Table<AssessmentDto>
           rowKey="id"
+          scroll={{ x: 'max-content' }}
           columns={columns}
           dataSource={query.data?.data ?? []}
           loading={query.isLoading}

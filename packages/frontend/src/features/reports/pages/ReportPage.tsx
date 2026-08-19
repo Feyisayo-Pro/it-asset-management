@@ -2,9 +2,11 @@ import { useState } from 'react';
 import {
   Button,
   Card,
+  Col,
   DatePicker,
   Descriptions,
   Input,
+  Row,
   Select,
   Skeleton,
   Space,
@@ -45,7 +47,7 @@ export const ReportPage = () => {
   };
 
   return (
-    <div>
+    <div style={{ maxWidth: 1280, margin: '0 auto' }}>
       <PageHeader
         title="Reports"
         subtitle="Generate and export reports"
@@ -77,7 +79,7 @@ export const ReportPage = () => {
       />
 
       <Card style={{ marginBottom: 16 }}>
-        <Space wrap>
+        <Space className="list-filters" wrap>
           <Select
             value={reportType}
             style={{ width: 220 }}
@@ -129,13 +131,13 @@ export const ReportPage = () => {
         </Space>
       </Card>
 
-      <Card>
-        {query.isLoading ? (
+      {query.isLoading ? (
+        <Card>
           <Skeleton active paragraph={{ rows: 8 }} />
-        ) : query.data ? (
-          <ReportDisplay data={query.data} reportType={reportType} />
-        ) : null}
-      </Card>
+        </Card>
+      ) : query.data ? (
+        <ReportDisplay data={query.data} reportType={reportType} />
+      ) : null}
     </div>
   );
 };
@@ -167,75 +169,82 @@ const ReportDisplay = ({
   );
 
   return (
-    <div>
+    <Space direction="vertical" size={16} style={{ width: '100%' }}>
       <Typography.Text type="secondary" style={{ fontSize: 12 }}>
         Generated: {data.generatedAt as string}
       </Typography.Text>
 
       {scalarKeys.length > 0 && (
-        <Descriptions bordered size="small" style={{ marginTop: 12, marginBottom: 16 }}>
-          {scalarKeys.map((k) => (
-            <Descriptions.Item key={k} label={formatLabel(k)}>
-              {formatValue(data[k])}
-            </Descriptions.Item>
-          ))}
-        </Descriptions>
+        <Card title="Summary" size="small">
+          <Descriptions bordered size="small" column={{ xs: 1, sm: 2, md: 3 }}>
+            {scalarKeys.map((k) => (
+              <Descriptions.Item key={k} label={formatLabel(k)}>
+                {formatValue(data[k])}
+              </Descriptions.Item>
+            ))}
+          </Descriptions>
+        </Card>
       )}
 
-      {objectKeys.map((k) => (
-        <div key={k} style={{ marginBottom: 16 }}>
-          <Typography.Title level={5}>{formatLabel(k)}</Typography.Title>
-          <Descriptions bordered size="small">
-            {Object.entries(data[k] as Record<string, unknown>).map(
-              ([subKey, val]) => (
-                <Descriptions.Item key={subKey} label={formatLabel(subKey)}>
-                  {formatValue(val)}
-                </Descriptions.Item>
-              ),
-            )}
-          </Descriptions>
-        </div>
-      ))}
+      <Row gutter={[16, 16]}>
+        {objectKeys.map((k) => (
+          <Col key={k} xs={24} md={12}>
+            <Card title={formatLabel(k)} size="small">
+              <Descriptions bordered size="small" column={1}>
+                {Object.entries(data[k] as Record<string, unknown>).map(
+                  ([subKey, val]) => (
+                    <Descriptions.Item key={subKey} label={formatLabel(subKey)}>
+                      {formatValue(val)}
+                    </Descriptions.Item>
+                  ),
+                )}
+              </Descriptions>
+            </Card>
+          </Col>
+        ))}
 
-      {arrayKeys.map((k) => {
-        const arr = data[k] as Record<string, unknown>[];
-        const isChartable = arr.length > 0 && (
-          ('month' in arr[0] && 'count' in arr[0]) ||
-          ('status' in arr[0] && 'count' in arr[0])
-        );
+        {arrayKeys.map((k) => {
+          const arr = data[k] as Record<string, unknown>[];
+          const isChartable = arr.length > 0 && (
+            ('month' in arr[0] && 'count' in arr[0]) ||
+            ('status' in arr[0] && 'count' in arr[0])
+          );
 
-        return (
-          <div key={k} style={{ marginBottom: 16 }}>
-            <Typography.Title level={5}>{formatLabel(k)}</Typography.Title>
-            {isChartable && (
-              <div style={{ marginBottom: 16 }}>
-                <SimpleBarChart
-                  data={arr.map((r) => ({
-                    label: String(
-                      r.month ?? r.status ?? r.reason ?? r.assetType ?? r.department ?? r.brand ?? '',
-                    ),
-                    value: Number(r.count ?? r.total ?? 0),
+          return (
+            <Col key={k} xs={24} md={12}>
+              <Card title={formatLabel(k)} size="small">
+                {isChartable && (
+                  <div style={{ marginBottom: 16 }}>
+                    <SimpleBarChart
+                      data={arr.map((r) => ({
+                        label: String(
+                          r.month ?? r.status ?? r.reason ?? r.assetType ?? r.department ?? r.brand ?? '',
+                        ),
+                        value: Number(r.count ?? r.total ?? 0),
+                      }))}
+                      color={reportType === 'repairs' ? '#fa8c16' : '#1A4FD1'}
+                    />
+                  </div>
+                )}
+                <Table
+                  dataSource={arr}
+                  rowKey={(_, i) => String(i)}
+                  size="small"
+                  scroll={{ x: 'max-content' }}
+                  pagination={arr.length > 10 ? { pageSize: 10 } : false}
+                  columns={Object.keys(arr[0]).map((col) => ({
+                    title: formatLabel(col),
+                    dataIndex: col,
+                    key: col,
+                    render: (v: unknown) => formatValue(v),
                   }))}
-                  color={reportType === 'repairs' ? '#fa8c16' : '#1B73E8'}
                 />
-              </div>
-            )}
-            <Table
-              dataSource={arr}
-              rowKey={(_, i) => String(i)}
-              size="small"
-              pagination={arr.length > 10 ? { pageSize: 10 } : false}
-              columns={Object.keys(arr[0]).map((col) => ({
-                title: formatLabel(col),
-                dataIndex: col,
-                key: col,
-                render: (v: unknown) => formatValue(v),
-              }))}
-            />
-          </div>
-        );
-      })}
-    </div>
+              </Card>
+            </Col>
+          );
+        })}
+      </Row>
+    </Space>
   );
 };
 

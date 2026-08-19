@@ -29,6 +29,9 @@ export interface ParsedInventoryRow {
   imei: string | null;
   department: string;
   status: AssetStatus;
+  /** From the source "NEWLY ASSIGNED" column — null when it names the
+   *  department/warehouse itself rather than a person (see isPersonalHolder). */
+  assignedEmployeeName: string | null;
   notes: string;
   /** Non-fatal — parsing succeeded, but used a fallback/guess. */
   warnings: string[];
@@ -233,6 +236,7 @@ export function parseLaptopRow(
     imei: null,
     department: dept,
     status: mappedStatus,
+    assignedEmployeeName: hasHolder ? titleCase(holderName) : null,
     notes: noteParts.join(' '),
     warnings,
   };
@@ -299,6 +303,7 @@ export function parsePhoneRow(
     imei,
     department: dept,
     status: mappedStatus,
+    assignedEmployeeName: hasHolder ? titleCase(holderName) : null,
     notes: noteParts.join(' '),
     warnings,
   };

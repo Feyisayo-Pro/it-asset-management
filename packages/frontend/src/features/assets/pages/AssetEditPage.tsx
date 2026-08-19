@@ -36,6 +36,7 @@ export const AssetEditPage = () => {
               warrantyExpiry: query.data.warrantyExpiry ?? undefined,
               officeLocation: query.data.officeLocation ?? undefined,
               department: query.data.department ?? undefined,
+              assignedEmployeeName: query.data.assignedEmployeeName ?? undefined,
               notes: query.data.notes ?? undefined,
             }}
             submitting={update.isPending}
@@ -55,6 +56,7 @@ export const AssetEditPage = () => {
                   warrantyExpiry: values.warrantyExpiry || null,
                   officeLocation: values.officeLocation || null,
                   department: values.department || null,
+                  assignedEmployeeName: values.assignedEmployeeName || null,
                   notes: values.notes || null,
                 });
                 messageApi.success('Asset updated');

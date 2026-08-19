@@ -161,6 +161,7 @@ export const BulkImportModal = ({ open, onClose }: Props) => {
             <Table
               rowKey="row"
               size="small"
+              scroll={{ x: 'max-content' }}
               columns={columns}
               dataSource={result.results}
               pagination={{ pageSize: 10 }}

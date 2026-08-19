@@ -15,6 +15,7 @@ export const queryKeys = {
     all: ['assets'] as const,
     list: (params: Record<string, unknown>) => ['assets', 'list', params] as const,
     byId: (id: string) => ['assets', 'detail', id] as const,
+    byTag: (tag: string) => ['assets', 'detail', 'byTag', tag] as const,
     history: (id: string) => ['assets', 'history', id] as const,
   },
   workflows: {

@@ -41,7 +41,7 @@ export const ActivityFeedPage = () => {
     <div>
       <PageHeader title="Activity Feed" subtitle="All notification activity" />
       <Card>
-        <Space style={{ marginBottom: 16 }}>
+        <Space className="list-filters" style={{ marginBottom: 16 }} wrap>
           <Select
             placeholder="All event types"
             allowClear

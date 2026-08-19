@@ -1,10 +1,48 @@
 import { useState } from 'react';
-import { Card, DatePicker, Drawer, Input, Space, Table, Tag, Typography } from 'antd';
+import { Card, Collapse, DatePicker, Descriptions, Drawer, Input, Space, Table, Tag, Typography } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import dayjs, { Dayjs } from 'dayjs';
 import { PageHeader } from '@/components/PageHeader';
 import { AuditLogEntryDto } from '@/api/audit.api';
 import { useAuditLogs } from '../hooks/useAuditLogs';
+
+/** True when every top-level value is a primitive — safe to render as a
+ *  flat key/value list instead of a raw JSON block. */
+const isFlatObject = (val: Record<string, unknown>): boolean =>
+  Object.values(val).every(
+    (v) => v === null || (typeof v !== 'object' && typeof v !== 'function'),
+  );
+
+const ValueBlock = ({ value, label }: { value: Record<string, unknown> | null; label: string }) => {
+  if (!value) return <Tag>None</Tag>;
+  if (isFlatObject(value)) {
+    return (
+      <Descriptions bordered size="small" column={1} style={{ marginTop: 4 }}>
+        {Object.entries(value).map(([k, v]) => (
+          <Descriptions.Item key={k} label={k}>
+            {v === null || v === undefined ? <Tag>None</Tag> : String(v)}
+          </Descriptions.Item>
+        ))}
+      </Descriptions>
+    );
+  }
+  return (
+    <pre
+      style={{
+        background: '#fafafa',
+        border: '1px solid #f0f0f0',
+        padding: 10,
+        borderRadius: 6,
+        overflowX: 'auto',
+        fontSize: 12,
+        marginTop: 4,
+      }}
+      aria-label={label}
+    >
+      {JSON.stringify(value, null, 2)}
+    </pre>
+  );
+};
 
 /**
  * Full audit trail (actor, action, entity, old/new value, IP,
@@ -48,11 +86,24 @@ export const AuditLogPage = () => {
     {
       title: 'Entity',
       key: 'entity',
-      render: (_, r) => (
-        <span>
-          {r.entityType} <Typography.Text type="secondary">{r.entityId.slice(0, 8)}…</Typography.Text>
-        </span>
-      ),
+      render: (_, r) => {
+        if (r.action === 'asset.bulk-imported') {
+          const count = typeof r.newValue?.count === 'number' ? r.newValue.count : undefined;
+          return (
+            <Tag color="blue">
+              Bulk Import {count !== undefined ? `(${count} assets)` : '(Multiple Entities)'}
+            </Tag>
+          );
+        }
+        return (
+          <span>
+            {r.entityType ?? '—'}{' '}
+            <Typography.Text type="secondary">
+              {r.entityId ? `${r.entityId.slice(0, 8)}…` : '—'}
+            </Typography.Text>
+          </span>
+        );
+      },
     },
     {
       title: 'Actor',
@@ -74,7 +125,7 @@ export const AuditLogPage = () => {
       <PageHeader title="Audit Log" subtitle="Full write-action audit trail — every create/update/status-change in the system" />
 
       <Card>
-        <Space style={{ marginBottom: 16 }} wrap>
+        <Space className="list-filters" style={{ marginBottom: 16 }} wrap>
           <Input
             placeholder="Actor user ID (UUID)"
             allowClear
@@ -122,6 +173,7 @@ export const AuditLogPage = () => {
 
         <Table<AuditLogEntryDto>
           rowKey="id"
+          scroll={{ x: 'max-content' }}
           columns={columns}
           dataSource={query.data?.data ?? []}
           loading={query.isLoading}
@@ -161,26 +213,66 @@ export const AuditLogPage = () => {
             </div>
             <div>
               <Typography.Text type="secondary">Entity</Typography.Text>
-              <div>{detail.entityType} — {detail.entityId}</div>
+              <div>
+                {detail.entityType ?? '—'}
+                {detail.entityId ? (
+                  <>
+                    {' — '}
+                    <Typography.Text code copyable>
+                      {detail.entityId}
+                    </Typography.Text>
+                  </>
+                ) : null}
+              </div>
+            </div>
+
+            <div>
+              <Typography.Text strong>Actor</Typography.Text>
+              <div>{detail.userId ?? <Typography.Text type="secondary">system</Typography.Text>}</div>
             </div>
             <div>
-              <Typography.Text type="secondary">Actor / IP / User agent / Correlation ID</Typography.Text>
-              <div>{detail.userId ?? 'system'}</div>
-              <div>{detail.ip ?? '—'}</div>
-              <div style={{ wordBreak: 'break-all' }}>{detail.userAgent ?? '—'}</div>
-              <div>{detail.correlationId ?? '—'}</div>
+              <Typography.Text strong>Actor IP</Typography.Text>
+              <div>
+                {detail.ip ? <Typography.Text code copyable>{detail.ip}</Typography.Text> : <Tag>None</Tag>}
+              </div>
             </div>
             <div>
-              <Typography.Text type="secondary">Old value</Typography.Text>
-              <pre style={{ background: '#fafafa', padding: 8, borderRadius: 4, overflowX: 'auto' }}>
-                {detail.oldValue ? JSON.stringify(detail.oldValue, null, 2) : '—'}
-              </pre>
+              <Typography.Text strong>Correlation ID</Typography.Text>
+              <div>
+                {detail.correlationId ? (
+                  <Typography.Text code copyable>
+                    {detail.correlationId}
+                  </Typography.Text>
+                ) : (
+                  <Tag>None</Tag>
+                )}
+              </div>
+            </div>
+
+            <Collapse
+              size="small"
+              items={[
+                {
+                  key: 'ua',
+                  label: 'Technical Metadata',
+                  children: detail.userAgent ? (
+                    <Typography.Text style={{ wordBreak: 'break-all', fontSize: 12 }}>
+                      {detail.userAgent}
+                    </Typography.Text>
+                  ) : (
+                    <Tag>None</Tag>
+                  ),
+                },
+              ]}
+            />
+
+            <div>
+              <Typography.Text strong>Old value</Typography.Text>
+              <ValueBlock value={detail.oldValue} label="Old value" />
             </div>
             <div>
-              <Typography.Text type="secondary">New value</Typography.Text>
-              <pre style={{ background: '#fafafa', padding: 8, borderRadius: 4, overflowX: 'auto' }}>
-                {detail.newValue ? JSON.stringify(detail.newValue, null, 2) : '—'}
-              </pre>
+              <Typography.Text strong>New value</Typography.Text>
+              <ValueBlock value={detail.newValue} label="New value" />
             </div>
           </Space>
         )}

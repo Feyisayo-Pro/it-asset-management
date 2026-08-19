@@ -34,7 +34,7 @@ export const App = () => (
         theme={{
           algorithm: theme.defaultAlgorithm,
           token: {
-            colorPrimary: '#1B73E8',
+            colorPrimary: '#1A4FD1',
             borderRadius: 6,
           },
         }}

@@ -207,7 +207,7 @@ export const UserManagementPage = () => {
       />
 
       <Card>
-        <Space style={{ marginBottom: 16 }} wrap>
+        <Space className="list-filters" style={{ marginBottom: 16 }} wrap>
           <Input.Search
             placeholder="Search by name or email"
             allowClear
@@ -248,6 +248,7 @@ export const UserManagementPage = () => {
 
         <Table<AdminUserDto>
           rowKey="id"
+          scroll={{ x: 'max-content' }}
           columns={columns}
           dataSource={usersQuery.data?.data ?? []}
           loading={usersQuery.isLoading}

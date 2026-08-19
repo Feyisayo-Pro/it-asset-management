@@ -58,6 +58,14 @@ export class UpdateAssetDto {
   @ApiPropertyOptional({ example: 'Engineering', maxLength: 128, nullable: true })
   @IsOptional() @IsString() @MaxLength(128) department?: string | null;
 
+  @ApiPropertyOptional({
+    description: 'Display-only employee name this device is assigned to — not a system user account.',
+    example: 'Ogunsola Gabriel',
+    maxLength: 128,
+    nullable: true,
+  })
+  @IsOptional() @IsString() @MaxLength(128) assignedEmployeeName?: string | null;
+
   @ApiPropertyOptional({ nullable: true })
   @IsOptional() @IsString() notes?: string | null;
 }

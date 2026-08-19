@@ -1,4 +1,5 @@
 import { Card, Col, Row, Skeleton, Statistic } from 'antd';
+import { useNavigate } from 'react-router-dom';
 import {
   LaptopOutlined,
   CheckCircleOutlined,
@@ -14,7 +15,10 @@ import { useDashboard } from '../hooks/useReports';
 import { SimpleBarChart, SimplePieChart } from '../components/SimpleBarChart';
 
 export const DashboardPage = () => {
+  const nav = useNavigate();
   const { data, isLoading } = useDashboard();
+  const toAssets = (status?: string) => () =>
+    nav(status ? `/assets?status=${status}` : '/assets');
 
   if (isLoading || !data) {
     return (
@@ -33,7 +37,7 @@ export const DashboardPage = () => {
 
       <Row gutter={[16, 16]}>
         <Col xs={12} sm={6}>
-          <Card>
+          <Card hoverable onClick={toAssets()} style={{ cursor: 'pointer' }}>
             <Statistic
               title="Total Assets"
               value={s.totalAssets}
@@ -42,7 +46,7 @@ export const DashboardPage = () => {
           </Card>
         </Col>
         <Col xs={12} sm={6}>
-          <Card>
+          <Card hoverable onClick={toAssets('Available')} style={{ cursor: 'pointer' }}>
             <Statistic
               title="Available"
               value={s.availableAssets}
@@ -52,17 +56,17 @@ export const DashboardPage = () => {
           </Card>
         </Col>
         <Col xs={12} sm={6}>
-          <Card>
+          <Card hoverable onClick={toAssets('Allocated')} style={{ cursor: 'pointer' }}>
             <Statistic
               title="Allocated"
               value={s.allocatedAssets}
               prefix={<TeamOutlined />}
-              valueStyle={{ color: '#1B73E8' }}
+              valueStyle={{ color: '#1A4FD1' }}
             />
           </Card>
         </Col>
         <Col xs={12} sm={6}>
-          <Card>
+          <Card hoverable onClick={toAssets('UnderRepair')} style={{ cursor: 'pointer' }}>
             <Statistic
               title="Under Repair"
               value={s.underRepair}
@@ -72,7 +76,7 @@ export const DashboardPage = () => {
           </Card>
         </Col>
         <Col xs={12} sm={6}>
-          <Card>
+          <Card hoverable onClick={toAssets('Disposed')} style={{ cursor: 'pointer' }}>
             <Statistic
               title="Disposed"
               value={s.disposedAssets}
@@ -120,7 +124,7 @@ export const DashboardPage = () => {
                 label: d.month.slice(5),
                 value: d.count,
               }))}
-              color="#1B73E8"
+              color="#1A4FD1"
             />
           </Card>
         </Col>

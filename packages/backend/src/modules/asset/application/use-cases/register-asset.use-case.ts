@@ -36,6 +36,7 @@ export interface RegisterAssetCommand {
   warrantyExpiry?: string | null;
   officeLocation?: string | null;
   department?: string | null;
+  assignedEmployeeName?: string | null;
   notes?: string | null;
   markAvailableImmediately?: boolean;
 }
@@ -88,6 +89,7 @@ export class RegisterAssetUseCase {
         : null,
       officeLocation: command.officeLocation ?? null,
       department: command.department ?? null,
+      assignedEmployeeName: command.assignedEmployeeName ?? null,
       notes: command.notes ?? null,
       now,
     });

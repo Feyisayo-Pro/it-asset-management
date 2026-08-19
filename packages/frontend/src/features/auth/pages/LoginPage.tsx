@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Card, Form, Input, Button, Alert, Typography, Space } from 'antd';
+import { Form, Input, Button, Alert, Typography } from 'antd';
 import { LockOutlined, MailOutlined } from '@ant-design/icons';
 import { useLogin } from '../hooks/useLogin';
 import { ApiError } from '@/types/api';
@@ -37,60 +37,96 @@ export const LoginPage = () => {
   };
 
   return (
-    <Card style={{ maxWidth: 400, width: '100%' }} bordered>
-      <Space direction="vertical" size="large" style={{ width: '100%' }}>
-        <div style={{ textAlign: 'center' }}>
-          <Typography.Title level={3} style={{ marginBottom: 0 }}>
-            Sign in
-          </Typography.Title>
-          <Typography.Text type="secondary">
-            IT Asset Management Platform
-          </Typography.Text>
-        </div>
+    <div style={{ width: '100%', maxWidth: 360 }}>
+      {/* Mark shown only when the brand panel is hidden (narrow viewports). */}
+      <div
+        className="auth-mobile-mark"
+        style={{
+          display: 'none',
+          alignItems: 'center',
+          marginBottom: 24,
+        }}
+      >
+        <img src="/sapphire-logo.png" alt="Sapphire Virtual Networks" style={{ width: 150, height: 'auto' }} />
+      </div>
 
-        {error && <Alert type="error" showIcon message={error} />}
+      <Typography.Title level={3} style={{ marginBottom: 4 }}>
+        Welcome back
+      </Typography.Title>
+      <Typography.Text type="secondary">
+        Sign in to your Sapphire Virtual Networks account
+      </Typography.Text>
 
-        <Form<FormValues>
-          layout="vertical"
-          onFinish={onFinish}
-          disabled={login.isPending}
+      {error && (
+        <Alert
+          type="error"
+          showIcon
+          message={error}
+          style={{ marginTop: 20 }}
+        />
+      )}
+
+      <Form<FormValues>
+        layout="vertical"
+        onFinish={onFinish}
+        disabled={login.isPending}
+        requiredMark={false}
+        style={{ marginTop: 28 }}
+      >
+        <Form.Item
+          name="email"
+          label="Email"
+          rules={[
+            { required: true, message: 'Email is required' },
+            { type: 'email', message: 'Enter a valid email address' },
+          ]}
         >
-          <Form.Item
-            name="email"
-            label="Email"
-            rules={[
-              { required: true, message: 'Email is required' },
-              { type: 'email', message: 'Enter a valid email address' },
-            ]}
-          >
-            <Input
-              prefix={<MailOutlined />}
-              autoComplete="email"
-              autoFocus
-              placeholder="you@company.com"
-            />
-          </Form.Item>
-          <Form.Item
-            name="password"
-            label="Password"
-            rules={[{ required: true, message: 'Password is required' }]}
-          >
-            <Input.Password
-              prefix={<LockOutlined />}
-              autoComplete="current-password"
-              placeholder="••••••••••••"
-            />
-          </Form.Item>
-          <Button
-            type="primary"
-            htmlType="submit"
-            block
-            loading={login.isPending}
-          >
-            Sign in
-          </Button>
-        </Form>
-      </Space>
-    </Card>
+          <Input
+            size="large"
+            prefix={<MailOutlined style={{ color: 'rgba(0,0,0,0.35)' }} />}
+            autoComplete="email"
+            autoFocus
+            placeholder="you@company.com"
+          />
+        </Form.Item>
+        <Form.Item
+          name="password"
+          label="Password"
+          rules={[{ required: true, message: 'Password is required' }]}
+          style={{ marginBottom: 8 }}
+        >
+          <Input.Password
+            size="large"
+            prefix={<LockOutlined style={{ color: 'rgba(0,0,0,0.35)' }} />}
+            autoComplete="current-password"
+            placeholder="••••••••••••"
+          />
+        </Form.Item>
+
+        <Button
+          type="primary"
+          htmlType="submit"
+          block
+          size="large"
+          loading={login.isPending}
+          style={{ marginTop: 20, height: 44, fontWeight: 500 }}
+        >
+          Sign in
+        </Button>
+      </Form>
+
+      <Typography.Text
+        type="secondary"
+        style={{ display: 'block', textAlign: 'center', marginTop: 24, fontSize: 13 }}
+      >
+        Contact your Stores or IT administrator if you need access.
+      </Typography.Text>
+
+      <style>{`
+        @media (max-width: 900px) {
+          .auth-mobile-mark { display: flex !important; }
+        }
+      `}</style>
+    </div>
   );
 };

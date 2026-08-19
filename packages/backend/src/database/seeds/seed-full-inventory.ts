@@ -88,6 +88,7 @@ function buildRecord(
     serialNumber: parsed.serialNumber,
     imei: parsed.imei,
     department: parsed.department,
+    assignedEmployeeName: parsed.assignedEmployeeName,
     notes: parsed.notes,
     now,
   });

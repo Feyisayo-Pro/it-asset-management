@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   Button,
   Card,
@@ -34,11 +34,14 @@ const STATUS_OPTIONS = [
 
 export const AssetListPage = () => {
   const nav = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [messageApi, contextHolder] = message.useMessage();
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(20);
   const [search, setSearch] = useState('');
-  const [status, setStatus] = useState<string | undefined>();
+  const [status, setStatus] = useState<string | undefined>(
+    searchParams.get('status') ?? undefined,
+  );
   const [department, setDepartment] = useState('');
   const [officeLocation, setOfficeLocation] = useState('');
   const [importOpen, setImportOpen] = useState(false);
@@ -96,6 +99,12 @@ export const AssetListPage = () => {
     { title: 'Device', key: 'device', render: (_, r) => `${r.brand} ${r.model} (${r.deviceType})` },
     { title: 'Serial', dataIndex: 'serialNumber', key: 'serialNumber' },
     { title: 'Department', dataIndex: 'department', key: 'department' },
+    {
+      title: 'Assigned to',
+      dataIndex: 'assignedEmployeeName',
+      key: 'assignedEmployeeName',
+      render: (v: string | null) => v ?? '—',
+    },
     { title: 'Status', key: 'status', render: (_, r) => <AssetStatusBadge status={r.status} /> },
     {
       title: 'Actions',
@@ -105,7 +114,14 @@ export const AssetListPage = () => {
         const items = [
           { key: 'view', label: 'View', onClick: () => nav(`/assets/${r.id}`) },
           { key: 'edit', label: 'Edit', onClick: () => nav(`/assets/${r.id}/edit`) },
-          { key: 'qr', label: 'View QR', onClick: () => window.open(assetsApi.qrUrl(r.id), '_blank') },
+          {
+            key: 'qr',
+            label: 'View QR',
+            onClick: async () => {
+              const blob = await assetsApi.qrBlob(r.id);
+              window.open(URL.createObjectURL(blob), '_blank');
+            },
+          },
           {
             key: 'delete',
             label: 'Delete',
@@ -145,7 +161,7 @@ export const AssetListPage = () => {
       />
 
       <Card>
-        <Space style={{ marginBottom: 16 }} wrap>
+        <Space className="list-filters" style={{ marginBottom: 16 }} wrap>
           <Input.Search
             placeholder="Search tag, serial, IMEI, brand, model"
             allowClear
@@ -159,10 +175,17 @@ export const AssetListPage = () => {
             placeholder="All statuses"
             allowClear
             style={{ width: 200 }}
+            value={status}
             options={STATUS_OPTIONS.map((s) => ({ value: s, label: s }))}
             onChange={(v) => {
               setStatus(v);
               setPage(1);
+              setSearchParams((prev) => {
+                const next = new URLSearchParams(prev);
+                if (v) next.set('status', v);
+                else next.delete('status');
+                return next;
+              });
             }}
           />
           <Input.Search
@@ -186,6 +209,7 @@ export const AssetListPage = () => {
         </Space>
         <Table<AssetDto>
           rowKey="id"
+          scroll={{ x: 'max-content' }}
           columns={columns}
           dataSource={query.data?.data ?? []}
           loading={query.isLoading}

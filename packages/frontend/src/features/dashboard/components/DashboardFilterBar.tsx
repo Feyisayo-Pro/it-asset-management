@@ -13,7 +13,7 @@ export const DashboardFilterBar = ({
   onChange,
 }: Props) => {
   return (
-    <Space wrap size={8}>
+    <Space className="list-filters" wrap size={8}>
       <Select
         placeholder="Department"
         value={filters.department}

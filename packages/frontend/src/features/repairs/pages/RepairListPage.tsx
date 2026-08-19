@@ -77,7 +77,7 @@ export const RepairListPage = () => {
         }
       />
       <Card>
-        <Space style={{ marginBottom: 16 }}>
+        <Space className="list-filters" style={{ marginBottom: 16 }} wrap>
           <Select<RepairStatus>
             placeholder="All statuses"
             allowClear
@@ -92,6 +92,7 @@ export const RepairListPage = () => {
         </Space>
         <Table<RepairDto>
           rowKey="id"
+          scroll={{ x: 'max-content' }}
           columns={columns}
           dataSource={query.data?.data ?? []}
           loading={query.isLoading}

@@ -32,7 +32,7 @@ describe('ExportAssetsUseCase', () => {
 
     const lines = csv.trim().split('\n');
     expect(lines[0]).toBe(
-      'asset_tag,device_type,brand,model,serial_number,imei,status,purchase_date,purchase_amount,purchase_currency,vendor,warranty_expiry,office_location,department,current_holder_id,notes',
+      'asset_tag,device_type,brand,model,serial_number,imei,status,purchase_date,purchase_amount,purchase_currency,vendor,warranty_expiry,office_location,department,assigned_employee_name,current_holder_id,notes',
     );
     expect(lines[1]).toContain('AST-2026-00001');
     expect(lines[1]).toContain('Lagos');

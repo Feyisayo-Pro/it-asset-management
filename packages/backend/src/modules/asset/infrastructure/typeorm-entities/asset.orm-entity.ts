@@ -54,6 +54,9 @@ export class AssetOrmEntity {
   @Column({ type: 'varchar', length: 128, nullable: true })
   department!: string | null;
 
+  @Column({ type: 'varchar', length: 128, nullable: true, name: 'assigned_employee_name' })
+  assignedEmployeeName!: string | null;
+
   @Column({ type: 'uuid', nullable: true, name: 'current_holder_id' })
   currentHolderId!: string | null;
 

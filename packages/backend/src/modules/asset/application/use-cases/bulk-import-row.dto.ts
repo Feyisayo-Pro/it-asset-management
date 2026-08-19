@@ -120,6 +120,16 @@ export class BulkImportRowDto {
   @MaxLength(128)
   department?: string;
 
+  @ApiPropertyOptional({
+    description: 'CSV column: assigned_employee_name — display-only, not a system user account.',
+    example: 'Ogunsola Gabriel',
+    maxLength: 128,
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(128)
+  assignedEmployeeName?: string;
+
   @ApiPropertyOptional({ description: 'CSV column: notes' })
   @IsOptional()
   @IsString()

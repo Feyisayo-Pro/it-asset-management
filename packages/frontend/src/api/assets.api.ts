@@ -17,6 +17,7 @@ export interface AssetDto {
   warrantyExpiry: string | null;
   officeLocation: string | null;
   department: string | null;
+  assignedEmployeeName: string | null;
   currentHolderId: string | null;
   status: string;
   notes: string | null;
@@ -61,6 +62,7 @@ export interface CreateAssetPayload {
   warrantyExpiry?: string | null;
   officeLocation?: string | null;
   department?: string | null;
+  assignedEmployeeName?: string | null;
   notes?: string | null;
   markAvailableImmediately?: boolean;
 }
@@ -87,6 +89,10 @@ export const assetsApi = {
   },
   getById: async (id: string): Promise<AssetDto> => {
     const { data } = await client.get<AssetDto>(`/assets/${id}`);
+    return data;
+  },
+  getByTag: async (tag: string): Promise<AssetDto> => {
+    const { data } = await client.get<AssetDto>(`/assets/tag/${tag}`);
     return data;
   },
   history: async (id: string): Promise<AssetHistoryEntry[]> => {
@@ -127,4 +133,17 @@ export const assetsApi = {
   },
   qrUrl: (id: string): string => `${env.apiBaseUrl}/assets/${id}/qr`,
   barcodeUrl: (id: string): string => `${env.apiBaseUrl}/assets/${id}/barcode`,
+  // The endpoints above require the same Bearer-token auth as everything
+  // else in the API — a plain <img src> or window.open() navigation to
+  // them can't attach that header, so the image just 401s. These fetch
+  // via the authenticated client and hand back a blob the caller can
+  // turn into an object URL instead.
+  qrBlob: async (id: string): Promise<Blob> => {
+    const { data } = await client.get<Blob>(`/assets/${id}/qr`, { responseType: 'blob' });
+    return data;
+  },
+  barcodeBlob: async (id: string): Promise<Blob> => {
+    const { data } = await client.get<Blob>(`/assets/${id}/barcode`, { responseType: 'blob' });
+    return data;
+  },
 };

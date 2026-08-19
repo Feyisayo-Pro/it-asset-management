@@ -64,7 +64,7 @@ export const ReturnListPage = () => {
         }
       />
       <Card>
-        <Space style={{ marginBottom: 16 }}>
+        <Space className="list-filters" style={{ marginBottom: 16 }} wrap>
           <Select
             placeholder="All states"
             allowClear
@@ -78,6 +78,7 @@ export const ReturnListPage = () => {
         </Space>
         <Table<ReturnDto>
           rowKey="id"
+          scroll={{ x: 'max-content' }}
           columns={columns}
           dataSource={query.data?.data ?? []}
           loading={query.isLoading}

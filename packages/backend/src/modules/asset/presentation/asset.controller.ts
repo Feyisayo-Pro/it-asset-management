@@ -21,7 +21,9 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
+import { RootConfig } from '../../../config/configuration';
 import { Roles } from '../../../common/decorators/roles.decorator';
 import { RequirePermissions } from '../../../common/decorators/permissions.decorator';
 import {
@@ -87,6 +89,7 @@ export class AssetController {
     private readonly exportAssets: ExportAssetsUseCase,
     private readonly getHistory: GetAssetHistoryUseCase,
     @Inject(BARCODE_SERVICE) private readonly barcodes: BarcodeService,
+    private readonly config: ConfigService<RootConfig>,
   ) {}
 
   @Get()
@@ -201,12 +204,18 @@ export class AssetController {
 
   @Get(':id/qr')
   @RequirePermissions(Permission.AssetRead)
-  @ApiOperation({ summary: 'Get a QR code (PNG) encoding the asset tag' })
+  @ApiOperation({
+    summary: 'Get a QR code (PNG) encoding a link to the asset\'s management page',
+    description:
+      'The QR payload is a full URL (frontend origin + /assets/tag/{assetTag}), not just the bare tag — scanning it with a phone camera opens the asset directly.',
+  })
   @ApiParam({ name: 'id', format: 'uuid' })
   @ApiResponse({ status: 200, description: 'PNG image (image/png)' })
   async qr(@Param('id', ParseUUIDPipe) id: string, @Res() res: Response) {
     const asset = await this.getAsset.byId(id);
-    const buf = await this.barcodes.qrPngBuffer(asset.assetTag);
+    const { corsOrigin } = this.config.getOrThrow<RootConfig['app']>('app');
+    const url = `${corsOrigin.replace(/\/$/, '')}/assets/tag/${asset.assetTag}`;
+    const buf = await this.barcodes.qrPngBuffer(url);
     res.setHeader('Content-Type', 'image/png');
     res.send(buf);
   }
